@@ -16,7 +16,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements OnGestureListener {
@@ -28,6 +30,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private ImageView iv;
 	private SubmitButton buttonCtrl = null;
 	ImageCache  cache = ImageCache.getInstance();
+	private static final String[] styles = {"全部风格","地中海式","亚洲风","现代风格","当代风格",
+		"传统风格","不拘一格","热带风格"};
+	private Spinner styleSpinner;
+	private ArrayAdapter<String> styleAdapter;
+	private static final String[] spaces = {"全部空间","浴室","卧室","壁橱","餐厅",
+		"门厅","外观","客厅","大堂","办公间","儿童房","厨房","景观","洗衣房","起居室","媒体室","天井",
+		"池","门廊","化妆间","楼梯","酒窖"};
+	private Spinner spaceSpinner;
+	private ArrayAdapter<String> spaceAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 		
 		mActivity = this;
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
+		styleSpinner = (Spinner) findViewById(R.id.style);
+		styleAdapter = new ArrayAdapter<String>(this,R.layout.stylespinner,styles);
+		styleSpinner.setAdapter(styleAdapter);
+		
+		spaceSpinner = (Spinner) findViewById(R.id.space);
+		spaceAdapter = new ArrayAdapter<String>(this,R.layout.spacespinner,spaces);
+		spaceSpinner.setAdapter(spaceAdapter);
+		
 		gestureDetector = new GestureDetector(this);
 		buttonCtrl = new SubmitButton();
 		buttonCtrl.addButtonControl(mActivity);
