@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ViewFlipper>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/flipper"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/style"
+            android:layout_width="136dip"
+            android:layout_height="46dip"
+            android:background="@drawable/button"
+            android:text="@string/style"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="2dip"
+            android:layout_height="fill_parent" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="46dip"
+            android:layout_height="46dip"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/logo" />
+
+        <View
+            android:layout_width="2dip"
+            android:layout_height="fill_parent" />
+
+        <Button
+            android:id="@+id/space"
+            android:layout_width="136dip"
+            android:layout_height="46dip"
+            android:background="@drawable/button"
+            android:text="@string/space"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/flipper"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/addidea"
+            android:layout_width="105dip"
+            android:layout_height="46dip"
+            android:background="@drawable/button"
+            android:text="@string/addidea"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="2dip"
+            android:layout_height="fill_parent" />
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="105dip"
+            android:layout_height="46dip"
+            android:background="@drawable/button"
+            android:text="@string/register"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="2dip"
+            android:layout_height="fill_parent" />
+
+        <Button
+            android:id="@+id/myidea"
+            android:layout_width="105dip"
+            android:layout_height="46dip"
+            android:background="@drawable/button"
+            android:text="@string/myidea"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</RelativeLayout>
