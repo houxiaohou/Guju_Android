@@ -5,7 +5,7 @@ import java.util.Random;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.guju.R;
-import android.guju.listener.ButtonControl;
+import android.guju.listener.SubmitButton;
 import android.guju.service.ImageCache;
 import android.guju.service.LoadImageTask;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private Activity mActivity = null;
 	private int num = randomInt();
 	private ImageView iv;
-	private ButtonControl buttonCtrl = null;
+	private SubmitButton buttonCtrl = null;
 	ImageCache  cache = ImageCache.getInstance();
 	
 	@Override
@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		mActivity = this;
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 		gestureDetector = new GestureDetector(this);
-		buttonCtrl = new ButtonControl();
+		buttonCtrl = new SubmitButton();
 		buttonCtrl.addButtonControl(mActivity);
 		
 		iv = new ImageView(this);

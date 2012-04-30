@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-public class ButtonControl {
+public class SubmitButton {
 	
 	private Button registerButton;
 	
