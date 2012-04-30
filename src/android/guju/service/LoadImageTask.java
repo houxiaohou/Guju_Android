@@ -43,13 +43,13 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 
 		try {
 			imgUrl = new URL("http://www.guju.com.cn/gimages/" + n
-					+ "_0_1-.jpg");
+					+ "_0_9-.jpg");
 			HttpURLConnection conn = (HttpURLConnection) imgUrl
 					.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();
 			BitmapFactory.Options ops = new BitmapFactory.Options();
-			ops.inSampleSize = 1;
+			ops.inSampleSize = 3;
 			bitmap = BitmapFactory.decodeStream(is, null, ops);
 			cache.addBitmapToCache(n, bitmap);
 			is.close();
