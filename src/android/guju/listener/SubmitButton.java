@@ -1,10 +1,13 @@
 package android.guju.listener;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.guju.R;
+import android.guju.action.registerAction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import android.widget.Button;
 public class SubmitButton {
 	
 	private Button registerButton;
+	private registerAction regAction;
 	
 	public void addButtonControl(final Activity activity){
 		
@@ -62,6 +66,16 @@ public class SubmitButton {
 															int arg1) {
 														// TODO Auto-generated method stub
 														
+														try {
+															regAction = new registerAction();
+															regAction.getUserInfo(activity);
+														} catch (IOException e) {
+															// TODO Auto-generated catch block
+															e.printStackTrace();
+														} catch (Exception e) {
+															// TODO Auto-generated catch block
+															e.printStackTrace();
+														}
 													}
 											
 										})
