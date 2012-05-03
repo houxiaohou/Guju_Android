@@ -1,6 +1,5 @@
 package android.guju.action;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -15,16 +14,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.guju.R;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 public class registerAction {
 
-	public void getUserInfo(Activity activity) throws Exception,
-			IOException {
+	public void getUserInfo(View view, Activity activity) throws Exception{
 
-		EditText emailText = (EditText) activity.findViewById(R.id.email);
-		EditText usernameText = (EditText) activity.findViewById(R.id.username);
-		EditText passwordText = (EditText) activity.findViewById(R.id.password);
+		EditText emailText = (EditText) view.findViewById(R.id.email);
+		EditText usernameText = (EditText) view.findViewById(R.id.username);
+		EditText passwordText = (EditText) view.findViewById(R.id.password);
 
 		String email = emailText.getText().toString();
 		String username = usernameText.getText().toString();
@@ -47,6 +47,7 @@ public class registerAction {
 					JSONObject jsonObj = new JSONObject(strResult);
 					String error = jsonObj.getString("error");
 					int errorNum = Integer.parseInt(error);
+					
 					if (errorNum == 0) {
 						new AlertDialog.Builder(activity)
 								.setTitle(R.string.regSuccess)
@@ -64,6 +65,8 @@ public class registerAction {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}else{
+			Log.d(username, "出错了~");
 		}
 	}
 
