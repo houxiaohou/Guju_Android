@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, Android_ImageSwitcherActivity!</string>
+    <string name="hello">image</string>
     <string name="app_name">谷居</string>
     <string name="addidea">加入灵感集</string>
     <string name="myidea">我的灵感集</string>
@@ -14,4 +14,7 @@
     <string name="style">按风格浏览</string>
     <string name="space">按空间浏览</string>
     <string name="logo">logo</string>
+    <string name="regSuccess">恭喜您</string>
+    <string name="regInfo">注册成功！</string>
+    <string name="OK">确定</string>
 </resources>

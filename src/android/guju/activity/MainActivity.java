@@ -24,10 +24,10 @@ import android.widget.ViewFlipper;
 public class MainActivity extends Activity implements OnGestureListener {
 
 	private GestureDetector gestureDetector = null;
-	private ViewFlipper viewFlipper = null;
 	private Activity mActivity = null;
 	private int num = randomInt();
 	private ImageView iv;
+	private ViewFlipper viewFlipper;
 	private SubmitButton buttonCtrl = null;
 	ImageCache  cache = ImageCache.getInstance();
 	private static final String[] styles = {"全部风格","地中海式","亚洲风","现代风格","当代风格",
@@ -62,8 +62,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 		buttonCtrl = new SubmitButton();
 		buttonCtrl.addButtonControl(mActivity);
 		
-		iv = new ImageView(this);
-		loadImage(num, iv, viewFlipper);
+		
+		loadImage(num, viewFlipper);
 	}
 
 	public int randomInt() {
@@ -71,20 +71,21 @@ public class MainActivity extends Activity implements OnGestureListener {
 		return num;
 	}
 	
-	public void loadImage(int n,ImageView imageView, ViewFlipper viewFlipper){
+	public void loadImage(int n ,ViewFlipper viewFlipper){
         final Bitmap bitmap = cache.getBitmapCache(n);
+        iv = new ImageView(this);
         if(bitmap != null){
-        	imageView.setImageBitmap(bitmap);
-        	imageView.setScaleType(ImageView.ScaleType.CENTER);
-        	viewFlipper.removeView(imageView);
-    		viewFlipper.addView(imageView);
+        	iv.setImageBitmap(bitmap);
+        	iv.setScaleType(ImageView.ScaleType.CENTER);
+        	viewFlipper.removeView(viewFlipper);
+        	viewFlipper.addView(iv);
         }else{
-        	LoadImageTask task = new LoadImageTask(imageView);
-        	task.execute(n+1);
-        	imageView.setScaleType(ImageView.ScaleType.CENTER);
-        	viewFlipper.removeView(imageView);
-        	viewFlipper.addView(imageView);
-        	
+        	LoadImageTask task = new LoadImageTask(iv);
+        	task.execute(n);
+        	iv.setImageBitmap(bitmap);
+        	iv.setScaleType(ImageView.ScaleType.CENTER);
+        	viewFlipper.removeView(viewFlipper);
+        	viewFlipper.addView(iv);	
         }
 		
 	}
@@ -101,22 +102,24 @@ public class MainActivity extends Activity implements OnGestureListener {
 					R.anim.push_right_in);
 			Animation rOutAnim = AnimationUtils.loadAnimation(mActivity,
 					R.anim.push_right_out);
-			num = num - 1;
-			loadImage(num, iv, viewFlipper);
-			viewFlipper.setInAnimation(rInAnim);
-			viewFlipper.setOutAnimation(rOutAnim);
+			
+			viewFlipper.setAnimation(rInAnim);
+			viewFlipper.setAnimation(rOutAnim);
 			viewFlipper.showPrevious();
+			num = num - 1;
+			loadImage(num,viewFlipper);
 			return true;
 		} else if (e2.getX() - e1.getX() < -80) {
 			Animation lInAnim = AnimationUtils.loadAnimation(mActivity,
 					R.anim.push_left_in);
 			Animation lOutAnim = AnimationUtils.loadAnimation(mActivity,
 					R.anim.push_left_out);
-			num = num + 1;
-			loadImage(num, iv, viewFlipper);
-			viewFlipper.setInAnimation(lInAnim);
-			viewFlipper.setOutAnimation(lOutAnim);
+			
+			viewFlipper.startAnimation(lInAnim);
+			viewFlipper.startAnimation(lOutAnim);
 			viewFlipper.showNext();
+			num = num + 1;
+			loadImage(num, viewFlipper);
 			return true;
 		}
 		return true;

@@ -41,6 +41,7 @@ public final class R {
         public static final int submit=0x7f030004;
     }
     public static final class string {
+        public static final int OK=0x7f05000f;
         public static final int addidea=0x7f050002;
         public static final int app_name=0x7f050001;
         public static final int email=0x7f050006;
@@ -48,6 +49,8 @@ public final class R {
         public static final int logo=0x7f05000c;
         public static final int myidea=0x7f050003;
         public static final int password=0x7f050008;
+        public static final int regInfo=0x7f05000e;
+        public static final int regSuccess=0x7f05000d;
         public static final int register=0x7f050009;
         public static final int space=0x7f05000b;
         public static final int style=0x7f05000a;
