@@ -10,15 +10,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import android.app.Activity;
+import android.guju.R;
+import android.widget.EditText;
+
 public class registerAction {
 	
-	public static void main(String[] args) throws Exception{
-		getUserInfo();
-	}
 	
-	public static void getUserInfo() throws Exception, IOException{
+	public static void getUserInfo(Activity activity) throws Exception, IOException{
 		
-		/**
+		
 		EditText emailText = (EditText) activity.findViewById(R.id.email); 
 		EditText usernameText = (EditText) activity.findViewById(R.id.username);
 		EditText passwordText = (EditText) activity.findViewById(R.id.password);
@@ -26,10 +27,7 @@ public class registerAction {
 		String email = emailText.getText().toString();
 		String username = usernameText.getText().toString();
 		String password = passwordText.getText().toString();
-		*/
-		String email = "jackiehou@173.com";
-		String username = "houxiyang";
-		String password = "900717";
+		
 		
 		try {
 			String enEmail = URLEncoder.encode(email,HTTP.UTF_8);
