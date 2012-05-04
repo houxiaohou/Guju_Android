@@ -8,7 +8,7 @@
     <string name="submit">登录</string>
     <string name="textcolor">#FFFFFFFF</string>
     <string name="email">输入邮箱</string>
-    <string name="username">输入用户名</string>
+    <string name="username">输入邮箱</string>
     <string name="password">输入密码</string>
     <string name="register">注册登录</string>
     <string name="style">按风格浏览</string>
@@ -17,4 +17,5 @@
     <string name="regSuccess">恭喜您</string>
     <string name="regInfo">注册成功！</string>
     <string name="OK">确定</string>
+    <string name="subInfo">登录成功！</string>
 </resources>

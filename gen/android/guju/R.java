@@ -23,15 +23,16 @@ public final class R {
     }
     public static final class id {
         public static final int addidea=0x7f060004;
-        public static final int email=0x7f060007;
+        public static final int email=0x7f060006;
         public static final int flipper=0x7f060000;
         public static final int logo=0x7f060002;
-        public static final int myidea=0x7f060006;
-        public static final int password=0x7f060009;
-        public static final int register=0x7f060005;
+        public static final int myidea=0x7f060005;
+        public static final int password=0x7f060008;
+        public static final int s_password=0x7f06000a;
+        public static final int s_username=0x7f060009;
         public static final int space=0x7f060003;
         public static final int style=0x7f060001;
-        public static final int username=0x7f060008;
+        public static final int username=0x7f060007;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -54,6 +55,7 @@ public final class R {
         public static final int register=0x7f050009;
         public static final int space=0x7f05000b;
         public static final int style=0x7f05000a;
+        public static final int subInfo=0x7f050010;
         public static final int submit=0x7f050004;
         public static final int textcolor=0x7f050005;
         public static final int username=0x7f050007;

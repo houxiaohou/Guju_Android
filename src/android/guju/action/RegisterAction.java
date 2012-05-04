@@ -12,13 +12,16 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.guju.R;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class registerAction {
+public class RegisterAction {
 
 	public void getUserInfo(View view, Activity activity) throws Exception{
 
@@ -45,10 +48,10 @@ public class registerAction {
 					String strResult = EntityUtils.toString(httpResponse
 							.getEntity());
 					JSONObject jsonObj = new JSONObject(strResult);
-					String error = jsonObj.getString("error");
-					int errorNum = Integer.parseInt(error);
-					
-					if (errorNum == 0) {
+					String isSuccess = jsonObj.getString("success");
+					String success = "true";
+
+					if (isSuccess.equals(success)) {
 						new AlertDialog.Builder(activity)
 								.setTitle(R.string.regSuccess)
 								.setMessage(R.string.regInfo)
@@ -59,6 +62,13 @@ public class registerAction {
 										
 									}
 								}).show();
+						SharedPreferences sharedPreferences = activity.getSharedPreferences("GujuAPP_userInfo", Context.MODE_PRIVATE);
+						Editor editor = sharedPreferences.edit();
+						editor.putString("email", email);
+						editor.putString("username", username);
+						editor.putString("password", password);
+						editor.commit();
+						
 					}
 				}
 			} catch (UnsupportedEncodingException e) {

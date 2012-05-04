@@ -6,7 +6,7 @@
     
     
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/s_username"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
@@ -15,7 +15,7 @@
         android:inputType="text" />
     
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/s_password"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
