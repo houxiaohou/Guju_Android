@@ -11,53 +11,59 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 public class StyleSpaceSelectListener {
-	
+
 	private Spinner styleSpinner;
 	private Spinner spaceSpinner;
-	private String styleId;
 	private String spaceId;
-	private CategoryRequest categoryRequest;
-	
-	
-	public ArrayList<String> addSpinnerListener(final Activity activity, final String[] styles, final String[] spaces, final int offset) throws Exception{
-		
+	private String styleId;
+	private CategoryRequest categoryRequest = new CategoryRequest();
+
+	public ArrayList<String> addSpinnerListener(final Activity activity,
+			final String[] styles, final String[] spaces, final int offset)
+			throws Exception {
+
 		styleSpinner = (Spinner) activity.findViewById(R.id.style);
 		spaceSpinner = (Spinner) activity.findViewById(R.id.space);
-		
-		styleSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
 
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				String style = styles[arg2];
-				styleId = SystemConstant.STYLES_ID_MAP.get(style);
-			}
+		styleSpinner
+				.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				styleId = "0";
-			}
-			
-		});
-		
-		spaceSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						String style = styles[arg2];
+						styleId = SystemConstant.STYLES_ID_MAP.get(style);
+					}
 
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				String space = spaces[arg2];
-				spaceId = SystemConstant.CATEGORIES_ID_MAP.get(space);
-			}
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+						styleId = "0";
+					}
 
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				spaceId = "0";
-			}
-			
-		});
-		
-		categoryRequest = new CategoryRequest();
-		return categoryRequest.request(styleId, spaceId, activity, offset);
+				});
+
+		spaceSpinner
+				.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						String space = spaces[arg2];
+						spaceId = SystemConstant.CATEGORIES_ID_MAP.get(space);
+					}
+
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+						spaceId = "0";
+					}
+
+				});
+		System.out.print(styleId);
+		if (styleId==null) {
+			return categoryRequest.request("0", "0", activity, offset);
+		}else{
+			return categoryRequest.request(styleId, spaceId, activity, offset);
+		}
 	}
-	
+
 }
