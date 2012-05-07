@@ -18,6 +18,7 @@ public class StyleSpaceSelectListener {
 	private String spaceId;
 	private CategoryRequest categoryRequest;
 	
+	
 	public ArrayList<String> addSpinnerListener(final Activity activity, final String[] styles, final String[] spaces, final int offset) throws Exception{
 		
 		styleSpinner = (Spinner) activity.findViewById(R.id.style);
@@ -34,7 +35,7 @@ public class StyleSpaceSelectListener {
 
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				
+				styleId = "0";
 			}
 			
 		});
@@ -50,7 +51,7 @@ public class StyleSpaceSelectListener {
 
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				
+				spaceId = "0";
 			}
 			
 		});

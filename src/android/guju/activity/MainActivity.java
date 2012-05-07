@@ -46,6 +46,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private StyleSpaceSelectListener styleSpaceListener = null;
 	private ArrayList<String> spaceIds;
 	private int offset = randomInt();
+	private int n;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,15 +68,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 				spaces);
 		spaceSpinner.setAdapter(spaceAdapter);
 
-		try {
-			styleSpaceListener = new StyleSpaceSelectListener();
-			spaceIds = styleSpaceListener.addSpinnerListener(mActivity, styles,
-					spaces, 10);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		gestureDetector = new GestureDetector(this);
 
 		buttonCtrl = new SubmitButton();
@@ -83,8 +75,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 		addIdeaButtonCtrl = new AddIdeaButton();
 		addIdeaButtonCtrl.addIdeaButtonListener(mActivity);
-
-		loadImage(1, spaceIds, viewFlipper);
+		n = 0;
+		loadImage(n, spaceIds, viewFlipper, 0);
 	}
 
 	public int randomInt() {
@@ -93,7 +85,16 @@ public class MainActivity extends Activity implements OnGestureListener {
 	}
 
 	public void loadImage(int n, ArrayList<String> spaceIds,
-			ViewFlipper viewFlipper) {
+			ViewFlipper viewFlipper, int offset) {
+		try {
+			spaceIds = new ArrayList<String>(10);
+			styleSpaceListener = new StyleSpaceSelectListener();
+			spaceIds = styleSpaceListener.addSpinnerListener(mActivity, styles,
+					spaces, offset);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int spaceId = Integer.parseInt(spaceIds.get(n));
 		final Bitmap bitmap = cache.getBitmapCache(spaceId);
 		iv = new ImageView(this);
@@ -139,6 +140,12 @@ public class MainActivity extends Activity implements OnGestureListener {
 			viewFlipper.startAnimation(lInAnim);
 			viewFlipper.startAnimation(lOutAnim);
 			viewFlipper.showNext();
+			if(n < 9){
+				n = n + 1;
+				loadImage(n, spaceIds, viewFlipper, offset);
+			}else{
+
+			}
 			return true;
 		}
 		return true;
