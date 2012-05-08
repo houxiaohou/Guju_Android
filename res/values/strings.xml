@@ -18,4 +18,5 @@
     <string name="regInfo">注册成功！</string>
     <string name="OK">确定</string>
     <string name="subInfo">登录成功！</string>
+    <string name="categoryString">分类浏览</string>
 </resources>

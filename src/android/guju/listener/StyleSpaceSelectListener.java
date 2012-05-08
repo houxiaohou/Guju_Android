@@ -60,9 +60,9 @@ public class StyleSpaceSelectListener {
 				});
 		System.out.print(styleId);
 		if (styleId==null) {
-			return categoryRequest.request("0", "0", activity, offset);
+			return categoryRequest.request("0", "0", offset);
 		}else{
-			return categoryRequest.request(styleId, spaceId, activity, offset);
+			return categoryRequest.request(styleId, spaceId, offset);
 		}
 	}
 

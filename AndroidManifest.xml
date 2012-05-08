@@ -4,11 +4,12 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="1" />
+    <uses-sdk android:minSdkVersion="10" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".service.ButtonStatus"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
@@ -20,11 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
-    <application
-        android:name=".SpinnerStatus"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
     </application>
 
 </manifest>
