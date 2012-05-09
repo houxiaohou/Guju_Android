@@ -18,8 +18,6 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 		imageViewReference = new WeakReference<ImageView>(imageView);
 	}
 
-	ImageCache cache = ImageCache.getInstance();
-
 	@Override
 	protected Bitmap doInBackground(Integer... m) {
 		getBitmap(m[0]-1);
@@ -51,7 +49,7 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 			BitmapFactory.Options ops = new BitmapFactory.Options();
 			ops.inSampleSize = 3;
 			bitmap = BitmapFactory.decodeStream(is, null, ops);
-			cache.addBitmapToCache(n, bitmap);
+			SystemApplication.getInstance().addBitmapToMemoryCache(n, bitmap);
 			is.close();
 		} catch (Exception e) {
 			e.printStackTrace();

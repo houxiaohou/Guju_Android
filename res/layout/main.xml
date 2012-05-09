@@ -46,7 +46,8 @@
             android:text="@string/OK"
             android:layout_width="75dip"
             android:layout_height="46dip"
-            android:background="@drawable/button"/>
+            android:background="@drawable/button"
+            android:textColor="#FFFFFF"/>
         
     </LinearLayout>
 

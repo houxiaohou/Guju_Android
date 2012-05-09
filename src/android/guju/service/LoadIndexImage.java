@@ -8,21 +8,23 @@ import android.widget.ViewFlipper;
 public class LoadIndexImage {
 
 	public void loadIndexImage(Activity activity, ImageView imageView,
-			ViewFlipper viewFlipper, ImageCache cache, int imageId) {
-		Bitmap bitmap = cache.getBitmapCache(imageId);
+			ViewFlipper viewFlipper, int imageId) {
+		Bitmap bitmap = SystemApplication.getInstance().getBitmapFromMemCache(imageId);
 		imageView = new ImageView(activity);
 		if (bitmap != null) {
+			
 			imageView.setImageBitmap(bitmap);
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			// viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
+			//new LoadImageTask(imageView).execute(imageId+1);
 		} else {
-			LoadImageTask task = new LoadImageTask(imageView);
-			task.execute(imageId);
+			new LoadImageTask(imageView).execute(imageId);
 			imageView.setImageBitmap(bitmap);
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			// viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
+			//new LoadImageTask(imageView).execute(imageId+1);
 		}
 	}
 

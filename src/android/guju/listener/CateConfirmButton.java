@@ -5,10 +5,9 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.guju.R;
-import android.guju.service.ButtonStatus;
 import android.guju.service.CategoryRequest;
-import android.guju.service.ImageCache;
 import android.guju.service.LoadImage;
+import android.guju.service.SystemApplication;
 import android.guju.service.SystemConstant;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +31,7 @@ public class CateConfirmButton {
 	public HashMap<String, String> addCateButtonListener(
 			final Activity activity, final String[] styles,
 			final String[] spaces, final ImageView iv,
-			final ViewFlipper viewFlipper, final ImageCache cache)
+			final ViewFlipper viewFlipper)
 			throws Exception {
 		styleSpinner = (Spinner) activity.findViewById(R.id.style);
 		spaceSpinner = (Spinner) activity.findViewById(R.id.space);
@@ -74,13 +73,12 @@ public class CateConfirmButton {
 
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ButtonStatus.getInstance().setStatus(true);
+				SystemApplication.getInstance().setStatus(true);
 				loadImage = new LoadImage();
 				request = new CategoryRequest();
 				try {
 					spaceIds = request.request(styleId, spaceId, 0);
-					loadImage.loadImage(0, iv, viewFlipper, activity, cache,
-							spaceIds);
+					loadImage.loadImage(0, iv, viewFlipper, activity, spaceIds);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -11,11 +11,10 @@ import android.guju.R;
 import android.guju.listener.AddIdeaButton;
 import android.guju.listener.CateConfirmButton;
 import android.guju.listener.SubmitButton;
-import android.guju.service.ButtonStatus;
 import android.guju.service.CategoryRequest;
-import android.guju.service.ImageCache;
 import android.guju.service.LoadImage;
 import android.guju.service.LoadIndexImage;
+import android.guju.service.SystemApplication;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -42,7 +41,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private SubmitButton buttonCtrl = null;
 	private AddIdeaButton addIdeaButtonCtrl = null;
 	private CateConfirmButton cateConfirmButt = null;
-	private ImageCache cache = ImageCache.getInstance();
 	private Spinner spaceSpinner;
 	private Spinner styleSpinner;
 	private ArrayAdapter<String> spaceAdapter;
@@ -54,7 +52,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private LoadImage loadImage = new LoadImage();
 	private LoadIndexImage loadIndexImage = new LoadIndexImage();
 	private HashMap<String, String> spinnerInfo;
-	private CategoryRequest request = new CategoryRequest();
+	private CategoryRequest request ;
 	private ArrayList<String> spaceIds;
 
 	@Override
@@ -66,7 +64,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		setContentView(R.layout.main);
 
 		mActivity = this;
-
+		 
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 
 		styleSpinner = (Spinner) findViewById(R.id.style);
@@ -90,15 +88,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 		cateConfirmButt = new CateConfirmButton();
 		try {
 			cateConfirmButt.addCateButtonListener(mActivity, styles, spaces,
-					iv, viewFlipper, cache);
+					iv, viewFlipper);
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, cache,
-				indexNum);
+		loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
 
 	}
 
@@ -115,17 +112,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		if (e2.getX() - e1.getX() > 80) {
-			boolean status = ButtonStatus.getInstance().getStatus();
+			boolean status = SystemApplication.getInstance().getStatus();
 			if (!status) {
 				indexNum--;
-				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper,
-						cache, indexNum);
+				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
 				viewFlipper.showPrevious();
 			} else {
 
 				try {
-					loadImage.loadImage(n, iv, viewFlipper, mActivity, cache,
-							spaceIds);
+					loadImage.loadImage(n, iv, viewFlipper, mActivity, spaceIds);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -133,11 +128,10 @@ public class MainActivity extends Activity implements OnGestureListener {
 			}
 			return true;
 		} else if (e2.getX() - e1.getX() < -80) {
-			boolean status = ButtonStatus.getInstance().getStatus();
+			boolean status = SystemApplication.getInstance().getStatus();
 			if (!status) {
 				indexNum++;
-				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper,
-						cache, indexNum);
+				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
 				viewFlipper.showNext();
 			} else {
 
@@ -149,9 +143,9 @@ public class MainActivity extends Activity implements OnGestureListener {
 					spinnerInfo = cateConfirmButt.getSpinnerInfo(mActivity, styles, spaces);
 					styleId = spinnerInfo.get("styleId");
 					spaceId = spinnerInfo.get("spaceId");
-					spaceIds = request.request(styleId, spaceId, l);
-					loadImage.loadImage(m, iv, viewFlipper, mActivity, cache,
-							spaceIds);
+					request = new CategoryRequest();
+					spaceIds = request.request(styleId, spaceId, 10*l);
+					loadImage.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
 					viewFlipper.showNext();
 
 				} catch (Exception e) {
