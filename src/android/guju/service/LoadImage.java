@@ -21,15 +21,14 @@ public class LoadImage {
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
-			new LoadImageTask(imageView).execute(Integer.parseInt(spaceIds.get(n+1)));
+			new LoadImageTask().execute(Integer.parseInt(spaceIds.get(n+1)));
 		} else {
-			//LoadImageTask task = new LoadImageTask(iv);
-			new LoadImageTask(imageView).execute(imageId);
-			imageView.setImageBitmap(bitmap);
+			new LoadImageTask().execute(imageId);
+			imageView.setImageBitmap(new LoadImageTask().execute(imageId).get());
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
-			new LoadImageTask(imageView).execute(Integer.parseInt(spaceIds.get(n+1)));
+			new LoadImageTask().execute(Integer.parseInt(spaceIds.get(n+1)));
 		}
 
 	}

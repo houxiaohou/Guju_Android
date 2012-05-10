@@ -33,7 +33,7 @@ public class AddIdeaButton {
 				String email = preferences.getString("email", "");
 				String password = preferences.getString("password", "");
 				if (!email.isEmpty() && !password.isEmpty()) {
-
+					
 				} else {
 					LayoutInflater factory = LayoutInflater.from(activity);
 					final View regView = factory.inflate(R.layout.submit, null);

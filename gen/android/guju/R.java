@@ -18,28 +18,33 @@ public final class R {
     }
     public static final class drawable {
         public static final int button=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int logo=0x7f020002;
+        public static final int guju=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int logo=0x7f020003;
     }
     public static final class id {
-        public static final int addidea=0x7f060004;
-        public static final int confirmButt=0x7f060003;
-        public static final int email=0x7f060006;
-        public static final int flipper=0x7f060000;
-        public static final int myidea=0x7f060005;
-        public static final int password=0x7f060008;
-        public static final int s_password=0x7f06000a;
-        public static final int s_username=0x7f060009;
-        public static final int space=0x7f060002;
-        public static final int style=0x7f060001;
-        public static final int username=0x7f060007;
+        public static final int addidea=0x7f060006;
+        public static final int confirmButt=0x7f060005;
+        public static final int email=0x7f060008;
+        public static final int flipper=0x7f060002;
+        public static final int l_password=0x7f060001;
+        public static final int l_username=0x7f060000;
+        public static final int myidea=0x7f060007;
+        public static final int password=0x7f06000a;
+        public static final int s_password=0x7f06000c;
+        public static final int s_username=0x7f06000b;
+        public static final int space=0x7f060004;
+        public static final int style=0x7f060003;
+        public static final int username=0x7f060009;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
-        public static final int register=0x7f030001;
-        public static final int spacespinner=0x7f030002;
-        public static final int stylespinner=0x7f030003;
-        public static final int submit=0x7f030004;
+        public static final int login=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int register=0x7f030002;
+        public static final int spacespinner=0x7f030003;
+        public static final int splash=0x7f030004;
+        public static final int stylespinner=0x7f030005;
+        public static final int submit=0x7f030006;
     }
     public static final class string {
         public static final int OK=0x7f05000f;

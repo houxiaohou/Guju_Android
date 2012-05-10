@@ -1,5 +1,6 @@
 package android.guju.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -13,18 +14,21 @@ import android.guju.listener.CateConfirmButton;
 import android.guju.listener.SubmitButton;
 import android.guju.service.CategoryRequest;
 import android.guju.service.LoadImage;
-import android.guju.service.LoadIndexImage;
 import android.guju.service.SystemApplication;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements OnGestureListener {
@@ -45,15 +49,25 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private Spinner styleSpinner;
 	private ArrayAdapter<String> spaceAdapter;
 	private ArrayAdapter<String> styleAdapter;
-	private int indexNum = randomInt();
-	private int n = 0;
+
 	private String styleId;
 	private String spaceId;
 	private LoadImage loadImage = new LoadImage();
-	private LoadIndexImage loadIndexImage = new LoadIndexImage();
 	private HashMap<String, String> spinnerInfo;
-	private CategoryRequest request ;
+	private CategoryRequest request;
 	private ArrayList<String> spaceIds;
+
+	private int n = 0;
+	private int x = 0;
+	private int index = randomInt();
+	private int lx;
+	private int lm;
+
+	private int k = 0;
+	private int y = 0;
+	private int offset = 0;
+	private int ly = 0;
+	private int ln;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +78,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		setContentView(R.layout.main);
 
 		mActivity = this;
-		 
+
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 
 		styleSpinner = (Spinner) findViewById(R.id.style);
@@ -95,7 +109,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 			e1.printStackTrace();
 		}
 
-		loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
+		try {
+			request = new CategoryRequest();
+			spaceIds = request.request("0", "0", index);
+			loadImage.loadImage(n, iv, viewFlipper, mActivity, spaceIds);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -113,45 +134,140 @@ public class MainActivity extends Activity implements OnGestureListener {
 			float velocityY) {
 		if (e2.getX() - e1.getX() > 80) {
 			boolean status = SystemApplication.getInstance().getStatus();
+			//没有选择分类，查看上一张
 			if (!status) {
-				indexNum--;
-				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
-				viewFlipper.showPrevious();
-			} else {
-
-				try {
-					loadImage.loadImage(n, iv, viewFlipper, mActivity, spaceIds);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (x == 0) {
+					Toast toast = Toast.makeText(mActivity, "前面没有了哦亲~",
+							Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+				} else if (x > 0) {
+					x--;
+					int m = x % 10;
+					int l = x / 10 % 10;
+					if (l != lm) {
+						index = index - 10;
+						try {
+							request = new CategoryRequest();
+							spaceIds = request.request("0", "0", index);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					lm = l;
+					n = x;
+					try {
+						loadImage.loadImage(m, iv, viewFlipper, mActivity,
+								spaceIds);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Log.i("m", Integer.toString(m));
+					Log.i("index", Integer.toString(index));
+					Log.i("spaceIds", spaceIds.get(m));
+				}
+			} 
+			//选择了分类，查看上一张
+			else {
+				if (y == 0) {
+					Toast toast = Toast.makeText(mActivity, "前面没有了哦亲~",
+							Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+				} else if (y > 0) {
+					y--;
+					int m = y % 10;
+					int l = y / 10 % 10;
+					if (l != ln) {
+						try{
+						offset = offset - 10;
+						spinnerInfo = cateConfirmButt.getSpinnerInfo(mActivity,
+								styles, spaces);
+						styleId = spinnerInfo.get("styleId");
+						spaceId = spinnerInfo.get("spaceId");
+						request = new CategoryRequest();
+						spaceIds = request.request(styleId, spaceId, offset);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					ln = l;
+					k = y;
+					try {
+						loadImage.loadImage(m, iv, viewFlipper, mActivity,
+								spaceIds);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Log.i("m", Integer.toString(m));
+					Log.i("offset", Integer.toString(offset));
+					Log.i("spaceIds", spaceIds.get(m));
 				}
 			}
 			return true;
 		} else if (e2.getX() - e1.getX() < -80) {
 			boolean status = SystemApplication.getInstance().getStatus();
+			//没有选择分类，查看下一张
 			if (!status) {
-				indexNum++;
-				loadIndexImage.loadIndexImage(mActivity, iv, viewFlipper, indexNum);
-				viewFlipper.showNext();
-			} else {
-
-				try {
-					
-					int m = n%10;
-					int l = n/10%10;
-					n++;
-					spinnerInfo = cateConfirmButt.getSpinnerInfo(mActivity, styles, spaces);
-					styleId = spinnerInfo.get("styleId");
-					spaceId = spinnerInfo.get("spaceId");
+				n++;
+				int m = n % 10;
+				int l = n / 10 % 10;
+				if (l != lx) {
+					index = index + 10;
 					request = new CategoryRequest();
-					spaceIds = request.request(styleId, spaceId, 10*l);
-					loadImage.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
-					viewFlipper.showNext();
-
+					try {
+						spaceIds = request.request("0", "0", index);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				x = n;
+				lx = l;
+				lm = l;
+				try {
+					loadImage
+							.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				Log.i("m", Integer.toString(m));
+				Log.i("index", Integer.toString(index));
+				Log.i("spaceIds", spaceIds.get(m));
+			} 
+			//选择了分类，查看下一张
+			else {
+				k++;
+				int m = k % 10;
+				int l = k / 10 % 10;
+				if (l != ly) {
+					offset = offset + 10;
+				}
+				y = k;
+				ly = l;
+				ln = l;
+				try {
+					spinnerInfo = cateConfirmButt.getSpinnerInfo(mActivity,
+							styles, spaces);
+					styleId = spinnerInfo.get("styleId");
+					spaceId = spinnerInfo.get("spaceId");
+					request = new CategoryRequest();
+					spaceIds = request.request(styleId, spaceId, offset);
+					loadImage
+							.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.i("m", Integer.toString(m));
+				Log.i("offset", Integer.toString(offset));
+				Log.i("spaceIds", spaceIds.get(m));
 			}
 			return true;
 		}
@@ -179,7 +295,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// 按下键盘上返回按钮
+
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 
 			new AlertDialog.Builder(this)

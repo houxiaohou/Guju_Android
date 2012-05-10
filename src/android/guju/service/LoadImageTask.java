@@ -1,22 +1,14 @@
 package android.guju.service;
 
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.widget.ImageView;
 
 public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
-
-	private final WeakReference<ImageView> imageViewReference;
-
-	public LoadImageTask(ImageView imageView) {
-		imageViewReference = new WeakReference<ImageView>(imageView);
-	}
 
 	@Override
 	protected Bitmap doInBackground(Integer... m) {
@@ -27,12 +19,7 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 
 	@Override
 	protected void onPostExecute(Bitmap bitmap) {
-		if (imageViewReference != null && bitmap != null) {
-			final ImageView imageView = (ImageView) imageViewReference.get();
-			if (imageView != null) {
-				imageView.setImageBitmap(bitmap);
-			}
-		}
+		
 	}
 	
 	public Bitmap getBitmap(int n){

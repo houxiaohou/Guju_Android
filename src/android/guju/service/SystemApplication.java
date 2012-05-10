@@ -31,12 +31,6 @@ public class SystemApplication extends Application{
 	}
 	
 	public void addBitmapToMemoryCache(int key, Bitmap bitmap) {
-		if(getBitmapFromMemCache(key-2) != null){
-			getBitmapFromMemCache(key-2).recycle();
-		}
-		if(getBitmapFromMemCache(key+2) != null){
-			getBitmapFromMemCache(key+2).recycle();
-		}
 	    if (getBitmapFromMemCache(key) == null) {  
 	        mMemoryCache.put(key, bitmap);  
 	    }  
