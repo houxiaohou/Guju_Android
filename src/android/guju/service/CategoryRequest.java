@@ -1,21 +1,19 @@
 package android.guju.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class CategoryRequest {
 
-	private ArrayList<String> spaceIds = new ArrayList<String>();
 	private String requestUrl;
+	private JSONObject jsonObj;
 
-	public ArrayList<String> request(String styleID, String spaceID, int offset)
+	public JSONObject request(String styleID, String spaceID, int offset)
 			throws Exception, IOException {
 		if (styleID == null) {
 			requestUrl = "http://guju.com.cn/getFeaturedSpaces/offset="
@@ -31,19 +29,9 @@ public class CategoryRequest {
 				.execute(httpRequest);
 		if (httpResponse.getStatusLine().getStatusCode() == 200) {
 			String strResult = EntityUtils.toString(httpResponse.getEntity());
-			JSONObject jsonObj = new JSONObject(strResult);
-			String isSuccess = jsonObj.getString("success");
-			String success = "true";
-			if (isSuccess.equals(success)) {
-				JSONArray results = jsonObj.getJSONArray("results");
-				for (int i = 0; i < results.length(); i++) {
-					JSONObject resultsObj = new JSONObject(results.getString(i));
-					String spaceId = resultsObj.getString("spaceId");
-					spaceIds.add(spaceId);
-				}
-			}
+			jsonObj = new JSONObject(strResult);	
 		}
-		return spaceIds;
+		return jsonObj;
 	}
 
 }

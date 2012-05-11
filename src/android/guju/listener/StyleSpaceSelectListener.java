@@ -2,9 +2,12 @@ package android.guju.listener;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.guju.R;
 import android.guju.service.CategoryRequest;
+import android.guju.service.JSONResolver;
 import android.guju.service.SystemConstant;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +20,9 @@ public class StyleSpaceSelectListener {
 	private String spaceId;
 	private String styleId;
 	private CategoryRequest categoryRequest = new CategoryRequest();
+	private ArrayList<String> spaceIds;
+	private JSONResolver jsonResolver;
+	private JSONObject jsonObj;
 
 	public ArrayList<String> addSpinnerListener(final Activity activity,
 			final String[] styles, final String[] spaces, final int offset)
@@ -60,9 +66,15 @@ public class StyleSpaceSelectListener {
 				});
 		System.out.print(styleId);
 		if (styleId==null) {
-			return categoryRequest.request("0", "0", offset);
+			jsonResolver = new JSONResolver();
+			jsonObj = categoryRequest.request("0", "0", offset);
+			spaceIds = jsonResolver.getSpaceIds(jsonObj);
+			return spaceIds;
 		}else{
-			return categoryRequest.request(styleId, spaceId, offset);
+			jsonResolver = new JSONResolver();
+			jsonObj = categoryRequest.request(styleId, spaceId, offset);
+			spaceIds = jsonResolver.getSpaceIds(jsonObj);
+			return spaceIds;
 		}
 	}
 

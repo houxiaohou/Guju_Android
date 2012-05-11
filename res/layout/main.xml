@@ -13,41 +13,43 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_alignTop="@id/flipper"
         android:orientation="horizontal" >
         		 
         <Spinner
             android:id="@+id/style"
-            android:layout_width="120dip"
-            android:layout_height="46dip"
-            android:background="@drawable/button"
+            android:layout_width="121dip"
+            android:layout_height="fill_parent"
             android:text="@string/style"
-            android:textColor="#FFFFFF" />
+            android:textColor="#9e7b5d"
+            android:background="@drawable/spinner" />
 
         <View
-            android:layout_width="2dip"
-            android:layout_height="fill_parent" />
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="#ffffff" />
         
         <Spinner
             android:id="@+id/space"
-            android:layout_width="120dip"
-            android:layout_height="46dip"
-            android:background="@drawable/button"
+            android:layout_width="121dip"
+            android:layout_height="fill_parent"
             android:text="@string/space"
-            android:textColor="#FFFFFF" />
+            android:textColor="#9e7b5d"
+            android:background="@drawable/spinner" />
         
         <View
-            android:layout_width="2dip"
-            android:layout_height="fill_parent" />
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="#ffffff" />
         
-        <Button 
+        <Button
             android:id="@+id/confirmButt"
-            android:text="@string/OK"
             android:layout_width="75dip"
-            android:layout_height="46dip"
-            android:background="@drawable/button"
-            android:textColor="#FFFFFF"/>
+            android:layout_height="fill_parent"
+            android:background="#9e7b5d"
+            android:text="@string/OK"
+            android:textColor="#ffffff" />
         
     </LinearLayout>
 
@@ -60,20 +62,21 @@
         <Button
             android:id="@+id/addidea"
             android:layout_width="159dip"
-            android:layout_height="46dip"
-            android:background="@drawable/button"
+            android:layout_height="40dp"
+            android:background="#9e7b5d"
             android:text="@string/addidea"
             android:textColor="#FFFFFF" />
 
         <View
-            android:layout_width="2dip"
-            android:layout_height="fill_parent" />
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="#ffffff" />
 
         <Button
             android:id="@+id/myidea"
-            android:layout_width="158dip"
-            android:layout_height="46dip"
-            android:background="@drawable/button"
+            android:layout_width="159dip"
+            android:layout_height="40dip"
+            android:background="#9e7b5d"
             android:text="@string/myidea"
             android:textColor="#FFFFFF" />
     </LinearLayout>

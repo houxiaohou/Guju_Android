@@ -3,12 +3,16 @@ package android.guju.listener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.guju.R;
 import android.guju.service.CategoryRequest;
+import android.guju.service.JSONResolver;
 import android.guju.service.LoadImage;
 import android.guju.service.SystemApplication;
 import android.guju.service.SystemConstant;
+import android.guju.service.ToastLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,12 +31,13 @@ public class CateConfirmButton {
 	private CategoryRequest request;
 	private ArrayList<String> spaceIds;
 	private HashMap<String, String> spinnerInfo = new HashMap<String, String>();
+	private JSONObject jsonObj;
+	private JSONResolver jsonResolver;
 
 	public HashMap<String, String> addCateButtonListener(
 			final Activity activity, final String[] styles,
 			final String[] spaces, final ImageView iv,
-			final ViewFlipper viewFlipper)
-			throws Exception {
+			final ViewFlipper viewFlipper) throws Exception {
 		styleSpinner = (Spinner) activity.findViewById(R.id.style);
 		spaceSpinner = (Spinner) activity.findViewById(R.id.space);
 
@@ -76,9 +81,17 @@ public class CateConfirmButton {
 				SystemApplication.getInstance().setStatus(true);
 				loadImage = new LoadImage();
 				request = new CategoryRequest();
+				jsonResolver = new JSONResolver();
 				try {
-					spaceIds = request.request(styleId, spaceId, 0);
-					loadImage.loadImage(0, iv, viewFlipper, activity, spaceIds);
+					jsonObj = request.request(styleId, spaceId, 0);
+					spaceIds = jsonResolver.getSpaceIds(jsonObj);
+					if(spaceIds.size() == 0){
+						new ToastLayout().showToast(activity, "没有符合条件的图片哦~");
+					}else{
+						loadImage.loadImage(0, iv, viewFlipper, activity,
+								spaceIds);
+						SystemApplication.getInstance().setBitmapId(spaceIds.get(0));
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

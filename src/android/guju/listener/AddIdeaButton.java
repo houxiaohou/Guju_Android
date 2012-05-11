@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.guju.R;
+import android.guju.action.AddIdeaAction;
 import android.guju.action.LoginAction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,9 @@ public class AddIdeaButton {
 						Context.MODE_PRIVATE);
 				String email = preferences.getString("email", "");
 				String password = preferences.getString("password", "");
-				if (!email.isEmpty() && !password.isEmpty()) {
-					
+				if (email.length() != 0 && email != null && password != null
+						&& password.length() != 0) {
+					new AddIdeaAction().addIdea(activity);
 				} else {
 					LayoutInflater factory = LayoutInflater.from(activity);
 					final View regView = factory.inflate(R.layout.submit, null);

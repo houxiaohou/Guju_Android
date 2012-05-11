@@ -7,6 +7,7 @@ public class SystemApplication extends Application{
 	
 	private boolean isPressed ;
 	private LruCache<Integer,Bitmap> mMemoryCache;
+	private String cBitmapId;
 	
 	private static SystemApplication singleton;
 	
@@ -38,5 +39,13 @@ public class SystemApplication extends Application{
 	  
 	public Bitmap getBitmapFromMemCache(int key) {  
 	    return mMemoryCache.get(key);  
-	} 
+	}
+	
+	public void setBitmapId(String i){
+		cBitmapId = i;
+	}
+	
+	public String getBitmapId(){
+		return cBitmapId;
+	}
 }
