@@ -19,7 +19,6 @@ import android.guju.service.LoadImage;
 import android.guju.service.SystemApplication;
 import android.guju.service.ToastLayout;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -86,13 +85,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 
 		styleSpinner = (Spinner) findViewById(R.id.style);
-		styleAdapter = new ArrayAdapter<String>(this, R.layout.spinner,
+		styleAdapter = new ArrayAdapter<String>(this, R.layout.spinnerselected,
 				styles);
+		styleAdapter.setDropDownViewResource(R.layout.spinner);
 		styleSpinner.setAdapter(styleAdapter);
 
 		spaceSpinner = (Spinner) findViewById(R.id.space);
-		spaceAdapter = new ArrayAdapter<String>(this, R.layout.spinner,
+		spaceAdapter = new ArrayAdapter<String>(this, R.layout.spinnerselected,
 				spaces);
+		spaceAdapter.setDropDownViewResource(R.layout.spinner);
 		spaceSpinner.setAdapter(spaceAdapter);
 
 		gestureDetector = new GestureDetector(this);
@@ -133,6 +134,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 	}
 
 	@Override
+	public void onDetachedFromWindow() {
+		try {
+			super.onDetachedFromWindow();
+		} catch (IllegalArgumentException e) {
+			
+		}
+	}
+
+	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
 	}
@@ -166,7 +176,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 					try {
 						loadImage.loadImage(m, iv, viewFlipper, mActivity,
 								spaceIds);
-						SystemApplication.getInstance().setBitmapId(spaceIds.get(m));
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -202,7 +213,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 					try {
 						loadImage.loadImage(m, iv, viewFlipper, mActivity,
 								spaceIds);
-						SystemApplication.getInstance().setBitmapId(spaceIds.get(m));
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -235,18 +247,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 				try {
 					loadImage
 							.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
-					SystemApplication.getInstance().setBitmapId(spaceIds.get(m));
+					SystemApplication.getInstance()
+							.setBitmapId(spaceIds.get(m));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Log.i("m",Integer.toString(m));
-				Log.i("spaceIds",spaceIds.get(m));
 			}
 			// 选择了分类，查看下一张
 			else {
 				k++;
-				if (k <= availableResults-1) {
+				if (k <= availableResults - 1) {
 					int m = k % 10;
 					int l = k / 10 % 10;
 					if (l != ly) {
@@ -268,7 +279,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 						spaceIds = jsonResolver.getSpaceIds(jsonObj);
 						loadImage.loadImage(m, iv, viewFlipper, mActivity,
 								spaceIds);
-						SystemApplication.getInstance().setBitmapId(spaceIds.get(m));
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
