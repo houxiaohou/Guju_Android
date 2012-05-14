@@ -54,4 +54,5 @@ public class SystemConstant {
 			put("酒架", "1016");
 		}
 	};
+	
 }

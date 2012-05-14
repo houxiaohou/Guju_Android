@@ -79,6 +79,7 @@ public class CateConfirmButton {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				SystemApplication.getInstance().setStatus(true);
+				SystemApplication.getInstance().setMyIdeaStatus(false);
 				loadImage = new LoadImage();
 				request = new CategoryRequest();
 				jsonResolver = new JSONResolver();

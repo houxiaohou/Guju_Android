@@ -12,10 +12,13 @@ import android.content.DialogInterface;
 import android.guju.R;
 import android.guju.listener.AddIdeaButton;
 import android.guju.listener.CateConfirmButton;
+import android.guju.listener.MyIdeaBookButton;
 import android.guju.listener.SubmitButton;
 import android.guju.service.CategoryRequest;
+import android.guju.service.CheckNetInfo;
 import android.guju.service.JSONResolver;
 import android.guju.service.LoadImage;
+import android.guju.service.LoadLocalBitmap;
 import android.guju.service.SystemApplication;
 import android.guju.service.ToastLayout;
 import android.os.Bundle;
@@ -44,6 +47,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private SubmitButton buttonCtrl = null;
 	private AddIdeaButton addIdeaButtonCtrl = null;
 	private CateConfirmButton cateConfirmButt = null;
+	private MyIdeaBookButton myIdeaButtonCtrl = null;
 	private Spinner spaceSpinner;
 	private Spinner styleSpinner;
 	private ArrayAdapter<String> spaceAdapter;
@@ -52,9 +56,11 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private String styleId;
 	private String spaceId;
 	private LoadImage loadImage = new LoadImage();
+	private LoadLocalBitmap loadLocal = new LoadLocalBitmap();
 	private HashMap<String, String> spinnerInfo;
 	private CategoryRequest request;
 	private ArrayList<String> spaceIds;
+	private int i = 0;
 
 	private int n = 0;
 	private int x = 0;
@@ -79,11 +85,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);
-
+		SystemApplication.getInstance().setMyIdeaStatus(false);
 		mActivity = this;
+		
+		
 
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
-
+		CheckNetInfo checkNet = new CheckNetInfo();
+		checkNet.checkNet(mActivity, iv, viewFlipper, i);
+		
 		styleSpinner = (Spinner) findViewById(R.id.style);
 		styleAdapter = new ArrayAdapter<String>(this, R.layout.spinnerselected,
 				styles);
@@ -103,6 +113,9 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 		addIdeaButtonCtrl = new AddIdeaButton();
 		addIdeaButtonCtrl.addIdeaButtonListener(mActivity);
+
+		myIdeaButtonCtrl = new MyIdeaBookButton();
+		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, i, iv, viewFlipper);
 
 		cateConfirmButt = new CateConfirmButton();
 		try {
@@ -138,7 +151,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		try {
 			super.onDetachedFromWindow();
 		} catch (IllegalArgumentException e) {
-			
+
 		}
 	}
 
@@ -151,18 +164,104 @@ public class MainActivity extends Activity implements OnGestureListener {
 			float velocityY) {
 		if (e2.getX() - e1.getX() > 80) {
 			boolean status = SystemApplication.getInstance().getStatus();
-			// 没有选择分类，查看上一张
-			if (!status) {
-				if (x == 0) {
-					new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
-				} else if (x > 0) {
-					x--;
-					int m = x % 10;
-					int l = x / 10 % 10;
-					if (l != lm) {
-						index = index - 10;
+			boolean isMyIdea = SystemApplication.getInstance()
+					.getMyIdeaStatus();
+			if (isMyIdea) {
+				i--;
+				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
+				SystemApplication.getInstance().setStatus(false);
+			} else {
+				// 没有选择分类，查看上一张
+				if (!status) {
+					if (x == 0) {
+						new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
+					} else if (x > 0) {
+						x--;
+						int m = x % 10;
+						int l = x / 10 % 10;
+						if (l != lm) {
+							index = index - 10;
+							try {
+								request = new CategoryRequest();
+								jsonResolver = new JSONResolver();
+								jsonObj = request.request("0", "0", index);
+								spaceIds = jsonResolver.getSpaceIds(jsonObj);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						lm = l;
+						n = x;
 						try {
-							request = new CategoryRequest();
+							loadImage.loadImage(m, iv, viewFlipper, mActivity,
+									spaceIds);
+							SystemApplication.getInstance().setBitmapId(
+									spaceIds.get(m));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				// 选择了分类，查看上一张
+				else {
+					if (y == 0) {
+						new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
+					} else if (y > 0) {
+						y--;
+						int m = y % 10;
+						int l = y / 10 % 10;
+						if (l != ln) {
+							try {
+								offset = offset - 10;
+								spinnerInfo = cateConfirmButt.getSpinnerInfo(
+										mActivity, styles, spaces);
+								styleId = spinnerInfo.get("styleId");
+								spaceId = spinnerInfo.get("spaceId");
+								request = new CategoryRequest();
+								jsonResolver = new JSONResolver();
+								jsonObj = request.request(styleId, spaceId,
+										offset);
+								spaceIds = jsonResolver.getSpaceIds(jsonObj);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						ln = l;
+						k = y;
+						try {
+							loadImage.loadImage(m, iv, viewFlipper, mActivity,
+									spaceIds);
+							SystemApplication.getInstance().setBitmapId(
+									spaceIds.get(m));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			return true;
+		} else if (e2.getX() - e1.getX() < -80) {
+			boolean status = SystemApplication.getInstance().getStatus();
+			boolean isMyIdea = SystemApplication.getInstance()
+					.getMyIdeaStatus();
+			if (isMyIdea) {
+				i++;
+				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
+				SystemApplication.getInstance().setStatus(false);
+			} else {
+				// 没有选择分类，查看下一张
+				if (!status) {
+					n++;
+					int m = n % 10;
+					int l = n / 10 % 10;
+					if (l != lx) {
+						index = index + 10;
+						request = new CategoryRequest();
+						try {
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request("0", "0", index);
 							spaceIds = jsonResolver.getSpaceIds(jsonObj);
@@ -171,8 +270,9 @@ public class MainActivity extends Activity implements OnGestureListener {
 							e.printStackTrace();
 						}
 					}
+					x = n;
+					lx = l;
 					lm = l;
-					n = x;
 					try {
 						loadImage.loadImage(m, iv, viewFlipper, mActivity,
 								spaceIds);
@@ -183,18 +283,19 @@ public class MainActivity extends Activity implements OnGestureListener {
 						e.printStackTrace();
 					}
 				}
-			}
-			// 选择了分类，查看上一张
-			else {
-				if (y == 0) {
-					new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
-				} else if (y > 0) {
-					y--;
-					int m = y % 10;
-					int l = y / 10 % 10;
-					if (l != ln) {
+				// 选择了分类，查看下一张
+				else {
+					k++;
+					if (k <= availableResults - 1) {
+						int m = k % 10;
+						int l = k / 10 % 10;
+						if (l != ly) {
+							offset = offset + 10;
+						}
+						y = k;
+						ly = l;
+						ln = l;
 						try {
-							offset = offset - 10;
 							spinnerInfo = cateConfirmButt.getSpinnerInfo(
 									mActivity, styles, spaces);
 							styleId = spinnerInfo.get("styleId");
@@ -202,93 +303,22 @@ public class MainActivity extends Activity implements OnGestureListener {
 							request = new CategoryRequest();
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request(styleId, spaceId, offset);
+							availableResults = jsonResolver
+									.getAvailableResults(jsonObj);
 							spaceIds = jsonResolver.getSpaceIds(jsonObj);
+							loadImage.loadImage(m, iv, viewFlipper, mActivity,
+									spaceIds);
+							SystemApplication.getInstance().setBitmapId(
+									spaceIds.get(m));
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+					} else {
+						new ToastLayout().showToast(mActivity, "最后一张了哦~");
 					}
-					ln = l;
-					k = y;
-					try {
-						loadImage.loadImage(m, iv, viewFlipper, mActivity,
-								spaceIds);
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			return true;
-		} else if (e2.getX() - e1.getX() < -80) {
-			boolean status = SystemApplication.getInstance().getStatus();
-			// 没有选择分类，查看下一张
-			if (!status) {
-				n++;
-				int m = n % 10;
-				int l = n / 10 % 10;
-				if (l != lx) {
-					index = index + 10;
-					request = new CategoryRequest();
-					try {
-						jsonResolver = new JSONResolver();
-						jsonObj = request.request("0", "0", index);
-						spaceIds = jsonResolver.getSpaceIds(jsonObj);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				x = n;
-				lx = l;
-				lm = l;
-				try {
-					loadImage
-							.loadImage(m, iv, viewFlipper, mActivity, spaceIds);
-					SystemApplication.getInstance()
-							.setBitmapId(spaceIds.get(m));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			// 选择了分类，查看下一张
-			else {
-				k++;
-				if (k <= availableResults - 1) {
-					int m = k % 10;
-					int l = k / 10 % 10;
-					if (l != ly) {
-						offset = offset + 10;
-					}
-					y = k;
-					ly = l;
-					ln = l;
-					try {
-						spinnerInfo = cateConfirmButt.getSpinnerInfo(mActivity,
-								styles, spaces);
-						styleId = spinnerInfo.get("styleId");
-						spaceId = spinnerInfo.get("spaceId");
-						request = new CategoryRequest();
-						jsonResolver = new JSONResolver();
-						jsonObj = request.request(styleId, spaceId, offset);
-						availableResults = jsonResolver
-								.getAvailableResults(jsonObj);
-						spaceIds = jsonResolver.getSpaceIds(jsonObj);
-						loadImage.loadImage(m, iv, viewFlipper, mActivity,
-								spaceIds);
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					new ToastLayout().showToast(mActivity, "最后一张了哦~");
-				}
 
+				}
 			}
 			return true;
 		}

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 public class SystemApplication extends Application{
 	
 	private boolean isPressed ;
+	private boolean isMyIdea;
 	private LruCache<Integer,Bitmap> mMemoryCache;
 	private String cBitmapId;
 	
@@ -21,6 +22,14 @@ public class SystemApplication extends Application{
 	
 	public boolean getStatus(){
 		return isPressed;
+	}
+	
+	public void setMyIdeaStatus(boolean b){
+		isMyIdea = b;
+	}
+	
+	public boolean getMyIdeaStatus(){
+		return isMyIdea;
 	}
 	
 	@Override

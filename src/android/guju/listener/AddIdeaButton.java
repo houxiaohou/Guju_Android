@@ -35,7 +35,12 @@ public class AddIdeaButton {
 				String password = preferences.getString("password", "");
 				if (email.length() != 0 && email != null && password != null
 						&& password.length() != 0) {
-					new AddIdeaAction().addIdea(activity);
+					try {
+						new AddIdeaAction().addIdea(activity);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					LayoutInflater factory = LayoutInflater.from(activity);
 					final View regView = factory.inflate(R.layout.submit, null);
