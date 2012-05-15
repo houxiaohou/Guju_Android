@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.guju.R;
+import android.guju.service.ToastLayout;
 import android.view.View;
 import android.widget.EditText;
 
@@ -42,26 +43,28 @@ public class LoginAction {
 					String strResult = EntityUtils.toString(httpResponse
 							.getEntity());
 					JSONObject jsonObj = new JSONObject(strResult);
-					String isSuccess = jsonObj.getString("success");
-					String success = "true";
+					String error = jsonObj.getString("error");
 
-					if (isSuccess.equals(success)) {		
-						new AlertDialog.Builder(activity)
-								.setTitle(R.string.regSuccess)
-								.setMessage(R.string.subInfo)
-								.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-									
-									public void onClick(DialogInterface dialog, int which) {
-										// TODO Auto-generated method stub
-										
-									}
-								}).show();
+					if (error.equals("0")) {		
+						ToastLayout toast = new ToastLayout();
+						String text = "登录成功！";
+						toast.showToast(activity, text);
 						SharedPreferences sharedPreferences = activity.getSharedPreferences("GujuAPP_userInfo", Context.MODE_PRIVATE);
 						Editor editor = sharedPreferences.edit();
 						editor.putString("email", email);
 						editor.putString("password", password);
 						editor.commit();
-						
+					}else if(error.equals("6")){
+						new AlertDialog.Builder(activity)
+						.setTitle("出错啦~")
+						.setMessage("用户名和密码不匹配！")
+						.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).show();
 					}
 				}
 			} catch (UnsupportedEncodingException e) {

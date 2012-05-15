@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.guju.R;
+import android.guju.service.ToastLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -48,20 +49,12 @@ public class RegisterAction {
 					String strResult = EntityUtils.toString(httpResponse
 							.getEntity());
 					JSONObject jsonObj = new JSONObject(strResult);
-					String isSuccess = jsonObj.getString("success");
-					String success = "true";
+					String error = jsonObj.getString("error");
 
-					if (isSuccess.equals(success)) {
-						new AlertDialog.Builder(activity)
-								.setTitle(R.string.regSuccess)
-								.setMessage(R.string.regInfo)
-								.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-									
-									public void onClick(DialogInterface dialog, int which) {
-										// TODO Auto-generated method stub
-										
-									}
-								}).show();
+					if (error.equals("0")) {
+						ToastLayout toast = new ToastLayout();
+						String text = "注册成功了！";
+						toast.showToast(activity, text);
 						SharedPreferences sharedPreferences = activity.getSharedPreferences("GujuAPP_userInfo", Context.MODE_PRIVATE);
 						Editor editor = sharedPreferences.edit();
 						editor.putString("email", email);
@@ -69,6 +62,39 @@ public class RegisterAction {
 						editor.putString("password", password);
 						editor.commit();
 						
+					}else if(error.equals("1")){
+						new AlertDialog.Builder(activity)
+						.setTitle("出错啦~")
+						.setMessage("邮箱被注册了，换一个吧！")
+						.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).show();
+					}else if(error.equals("3")){
+						new AlertDialog.Builder(activity)
+						.setTitle("出错啦~")
+						.setMessage("这个名字被人注册了，换一个吧！")
+						.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).show();
+					}else if(error.equals("2")){
+						new AlertDialog.Builder(activity)
+						.setTitle("出错啦~")
+						.setMessage("密码最少6个字符哦！")
+						.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).show();
 					}
 				}
 			} catch (UnsupportedEncodingException e) {

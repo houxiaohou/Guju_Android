@@ -9,6 +9,7 @@ public class SystemApplication extends Application{
 	private boolean isMyIdea;
 	private LruCache<Integer,Bitmap> mMemoryCache;
 	private String cBitmapId;
+	private int n = 0;
 	
 	private static SystemApplication singleton;
 	
@@ -30,6 +31,24 @@ public class SystemApplication extends Application{
 	
 	public boolean getMyIdeaStatus(){
 		return isMyIdea;
+	}
+	
+	public int getValueOfn(){
+		return n;
+	}
+	
+	public void setValueOfn(int m){
+		n = m;
+	}
+	
+	public int njia(){
+		n = n + 1;
+		return n;
+	}
+	
+	public int njian(){
+		n = n -1;
+		return n;
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ public class MyIdeaBookButton {
 
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				SystemApplication.getInstance().setValueOfn(0);
 				SystemApplication.getInstance().setMyIdeaStatus(true);
 				loadLocal = new LoadLocalBitmap();
 				loadLocal.loadLocalPic(activity, imageView, viewFlipper, i);

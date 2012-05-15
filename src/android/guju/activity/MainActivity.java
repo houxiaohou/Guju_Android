@@ -60,7 +60,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private HashMap<String, String> spinnerInfo;
 	private CategoryRequest request;
 	private ArrayList<String> spaceIds;
-	private int i = 0;
 
 	private int n = 0;
 	private int x = 0;
@@ -87,13 +86,11 @@ public class MainActivity extends Activity implements OnGestureListener {
 		setContentView(R.layout.main);
 		SystemApplication.getInstance().setMyIdeaStatus(false);
 		mActivity = this;
-		
-		
 
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 		CheckNetInfo checkNet = new CheckNetInfo();
-		checkNet.checkNet(mActivity, iv, viewFlipper, i);
-		
+		checkNet.checkNet(mActivity, iv, viewFlipper, 0);
+
 		styleSpinner = (Spinner) findViewById(R.id.style);
 		styleAdapter = new ArrayAdapter<String>(this, R.layout.spinnerselected,
 				styles);
@@ -115,7 +112,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		addIdeaButtonCtrl.addIdeaButtonListener(mActivity);
 
 		myIdeaButtonCtrl = new MyIdeaBookButton();
-		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, i, iv, viewFlipper);
+		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, 0, iv, viewFlipper);
 
 		cateConfirmButt = new CateConfirmButton();
 		try {
@@ -167,7 +164,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 			boolean isMyIdea = SystemApplication.getInstance()
 					.getMyIdeaStatus();
 			if (isMyIdea) {
-				i--;
+				SystemApplication.getInstance().njian();
+				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
 				SystemApplication.getInstance().setStatus(false);
 			} else {
@@ -249,7 +247,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 			boolean isMyIdea = SystemApplication.getInstance()
 					.getMyIdeaStatus();
 			if (isMyIdea) {
-				i++;
+				SystemApplication.getInstance().njia();
+				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
 				SystemApplication.getInstance().setStatus(false);
 			} else {

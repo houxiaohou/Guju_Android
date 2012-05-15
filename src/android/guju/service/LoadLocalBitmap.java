@@ -30,10 +30,12 @@ public class LoadLocalBitmap {
 			viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
 		} else if (i >= files.length) {
+			SystemApplication.getInstance().setValueOfn(files.length-1);
 			String text = "最后一张了哦~";
 			toast = new ToastLayout();
 			toast.showToast(activity, text);
 		} else if (i < 0) {
+			SystemApplication.getInstance().setValueOfn(0);
 			String text = "前面没有啦~";
 			toast = new ToastLayout();
 			toast.showToast(activity, text);
