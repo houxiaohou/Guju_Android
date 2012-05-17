@@ -11,9 +11,17 @@ import android.os.AsyncTask;
 public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 
 	@Override
+	protected void onPreExecute() {
+		
+	}
+	
+	@Override  
+    protected void onProgressUpdate(Integer... values) {   
+		
+    }
+	
+	@Override
 	protected Bitmap doInBackground(Integer... m) {
-		getBitmap(m[0]-1);
-		getBitmap(m[0]+1);
 		return getBitmap(m[0]);
 	}
 
@@ -21,8 +29,8 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 	protected void onPostExecute(Bitmap bitmap) {
 		
 	}
-	
-	public Bitmap getBitmap(int n){
+
+	public Bitmap getBitmap(int n) {
 		URL imgUrl = null;
 		Bitmap bitmap = null;
 

@@ -9,6 +9,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:contentDescription="@string/hello" >
+        
+        <ProgressBar
+            android:id="@+id/proBar"
+            android:layout_width="120dip"
+            android:layout_height="120dip"
+            android:layout_gravity="center" />
+        
     </android.guju.service.GabrielleViewFlipper>
 
     <LinearLayout
@@ -59,56 +66,54 @@
         <LinearLayout
             android:layout_width="159dip"
             android:layout_height="40dip"
-            android:orientation="horizontal"
-            android:background="#9e7b5d" >
-            
-			<ImageView
-			    android:id="@+id/addicon"
-			    android:layout_width="40dip"
-			    android:layout_height="40dip"
-			    android:src="@drawable/add"
-			    android:contentDescription="@string/addidea"
-			    android:layout_marginLeft="10dip" />
-			    
+            android:background="#9e7b5d"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/addicon"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginLeft="10dip"
+                android:contentDescription="@string/addidea"
+                android:src="@drawable/add" />
+
             <Button
                 android:id="@+id/addidea"
                 android:layout_width="80dip"
                 android:layout_height="40dp"
                 android:background="#9e7b5d"
+                android:gravity="center"
                 android:text="@string/addidea"
-                android:textColor="#FFFFFF"
-                android:gravity="center" />
-            
+                android:textColor="#FFFFFF" />
         </LinearLayout>
-        
-		<View
+
+        <View
             android:layout_width="1dip"
             android:layout_height="fill_parent"
             android:background="#ffffff" />
-		
+
         <LinearLayout
             android:layout_width="159dip"
             android:layout_height="40dip"
-            android:orientation="horizontal"
-            android:background="#9e7b5d" >
-            
-			<ImageView
-			    android:id="@+id/ideaicon"
-			    android:layout_width="40dip"
-			    android:layout_height="40dip"
-			    android:src="@drawable/ideabook"
-			    android:contentDescription="@string/myidea"
-			    android:layout_marginLeft="10dip" />
-			    
+            android:background="#9e7b5d"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/ideaicon"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginLeft="10dip"
+                android:contentDescription="@string/myidea"
+                android:src="@drawable/ideabook" />
+
             <Button
                 android:id="@+id/myidea"
                 android:layout_width="80dip"
                 android:layout_height="40dp"
                 android:background="#9e7b5d"
+                android:gravity="center"
                 android:text="@string/myidea"
-                android:textColor="#FFFFFF"
-                android:gravity="center" />
-            
+                android:textColor="#FFFFFF" />
         </LinearLayout>
     </LinearLayout>
 

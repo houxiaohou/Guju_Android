@@ -9,6 +9,12 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:contentDescription="@string/hello" >
+
+        <ProgressBar
+            android:id="@+id/proBar"
+            android:layout_width="120dip"
+            android:layout_height="120dip"
+            android:layout_gravity="center" />
     </android.guju.service.GabrielleViewFlipper>
 
     <LinearLayout
@@ -94,9 +100,9 @@
                 android:id="@+id/ideaicon"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
+                android:layout_marginTop="5dip"
                 android:contentDescription="@string/myidea"
-                android:src="@drawable/ideabook1"
-                android:layout_marginTop="5dip" />
+                android:src="@drawable/ideabook1" />
 
             <Button
                 android:id="@+id/myidea"

@@ -22,14 +22,18 @@ import android.guju.service.LoadLocalBitmap;
 import android.guju.service.SystemApplication;
 import android.guju.service.ToastLayout;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
@@ -52,6 +56,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private Spinner styleSpinner;
 	private ArrayAdapter<String> spaceAdapter;
 	private ArrayAdapter<String> styleAdapter;
+	private ProgressBar progressBar;
 
 	private String styleId;
 	private String spaceId;
@@ -88,6 +93,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 		mActivity = this;
 
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
+		progressBar = (ProgressBar) findViewById(R.id.proBar);
+
 		CheckNetInfo checkNet = new CheckNetInfo();
 		checkNet.checkNet(mActivity, iv, viewFlipper, 0);
 
@@ -124,17 +131,33 @@ public class MainActivity extends Activity implements OnGestureListener {
 			e1.printStackTrace();
 		}
 
-		try {
-			request = new CategoryRequest();
-			jsonResolver = new JSONResolver();
-			jsonObj = request.request("0", "0", index);
-			spaceIds = jsonResolver.getSpaceIds(jsonObj);
-			loadImage.loadImage(0, iv, viewFlipper, mActivity, spaceIds);
-			SystemApplication.getInstance().setBitmapId(spaceIds.get(0));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		progressBar.setVisibility(View.VISIBLE);
+
+		handler.post(new Runnable() {
+
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					request = new CategoryRequest();
+					jsonResolver = new JSONResolver();
+					jsonObj = request.request("0", "0", index);
+					spaceIds = jsonResolver.getSpaceIds(jsonObj);
+					loadImage
+							.loadImage(0, iv, viewFlipper, mActivity, spaceIds);
+					SystemApplication.getInstance()
+							.setBitmapId(spaceIds.get(0));
+
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		});
 
 	}
 
@@ -142,6 +165,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 		int num = (Math.abs(new Random().nextInt())) % 6521 + 1;
 		return num;
 	}
+
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				progressBar.setVisibility(View.GONE);
+				break;
+			}
+		}
+	};
 
 	@Override
 	public void onDetachedFromWindow() {
@@ -191,11 +225,12 @@ public class MainActivity extends Activity implements OnGestureListener {
 						}
 						lm = l;
 						n = x;
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
 						try {
 							loadImage.loadImage(m, iv, viewFlipper, mActivity,
 									spaceIds);
-							SystemApplication.getInstance().setBitmapId(
-									spaceIds.get(m));
+
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -366,7 +401,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 				public void onClick(DialogInterface dialog, int whichButton) {
 
-					finish();
+					System.exit(0);
 
 				}
 
