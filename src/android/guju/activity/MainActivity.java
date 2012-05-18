@@ -9,7 +9,10 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.guju.R;
+import android.guju.Async.AsyncLoadTask;
+import android.guju.Async.RequestRunnable;
 import android.guju.listener.AddIdeaButton;
 import android.guju.listener.CateConfirmButton;
 import android.guju.listener.MyIdeaBookButton;
@@ -23,6 +26,7 @@ import android.guju.service.SystemApplication;
 import android.guju.service.ToastLayout;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -81,6 +85,11 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private JSONObject jsonObj;
 	private JSONResolver jsonResolver;
 	private int availableResults = 2;
+	
+	
+	private static final int MSG_SUCCESS = 0;
+	private Bitmap bitmap;
+	private Thread mThread;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,52 +139,55 @@ public class MainActivity extends Activity implements OnGestureListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 		progressBar.setVisibility(View.VISIBLE);
-
-		handler.post(new Runnable() {
-
-			public void run() {
-				// TODO Auto-generated method stub
-				try {
-					request = new CategoryRequest();
-					jsonResolver = new JSONResolver();
-					jsonObj = request.request("0", "0", index);
-					spaceIds = jsonResolver.getSpaceIds(jsonObj);
-					loadImage
-							.loadImage(0, iv, viewFlipper, mActivity, spaceIds);
-					SystemApplication.getInstance()
-							.setBitmapId(spaceIds.get(0));
-
-					Message msg = new Message();
-					msg.what = 1;
-					handler.sendMessage(msg);
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		});
+		
+		mThread = new Thread(runnable);
+		mThread.start();
 
 	}
+
+	Runnable runnable = new Runnable() {
+
+		public void run() {
+			// TODO Auto-generated method stub
+			Looper.prepare();
+			try {
+				request = new CategoryRequest();
+				jsonResolver = new JSONResolver();
+				jsonObj = request.request("0", "0", index);
+				spaceIds = jsonResolver.getSpaceIds(jsonObj);
+				int imageId = Integer.parseInt(spaceIds.get(n));
+				bitmap  = new AsyncLoadTask(imageId).execute().get();
+				mHandler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	};
+	
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MSG_SUCCESS:
+				progressBar.setVisibility(View.GONE);
+				iv = new ImageView(mActivity);
+				iv.setImageBitmap((Bitmap) msg.obj);
+				iv.setScaleType(ImageView.ScaleType.CENTER);
+				viewFlipper.removeAllViews();
+				viewFlipper.addView(iv);
+				break;
+			}
+		}
+	};
 
 	public int randomInt() {
 		int num = (Math.abs(new Random().nextInt())) % 6521 + 1;
 		return num;
 	}
-
-	private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				progressBar.setVisibility(View.GONE);
-				break;
-			}
-		}
-	};
 
 	@Override
 	public void onDetachedFromWindow() {
@@ -213,28 +225,16 @@ public class MainActivity extends Activity implements OnGestureListener {
 						int l = x / 10 % 10;
 						if (l != lm) {
 							index = index - 10;
-							try {
-								request = new CategoryRequest();
-								jsonResolver = new JSONResolver();
-								jsonObj = request.request("0", "0", index);
-								spaceIds = jsonResolver.getSpaceIds(jsonObj);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
 						}
-						lm = l;
-						n = x;
+						progressBar.setVisibility(View.VISIBLE);
+						Runnable runnable = new RequestRunnable("0", "0", index, m, mHandler);
+						Thread thread = new Thread(runnable);
+						thread.start();
 						SystemApplication.getInstance().setBitmapId(
 								spaceIds.get(m));
-						try {
-							loadImage.loadImage(m, iv, viewFlipper, mActivity,
-									spaceIds);
-
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						
+						lm = l;
+						n = x;
 					}
 				}
 				// 选择了分类，查看上一张
@@ -246,33 +246,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 						int m = y % 10;
 						int l = y / 10 % 10;
 						if (l != ln) {
-							try {
-								offset = offset - 10;
-								spinnerInfo = cateConfirmButt.getSpinnerInfo(
-										mActivity, styles, spaces);
-								styleId = spinnerInfo.get("styleId");
-								spaceId = spinnerInfo.get("spaceId");
-								request = new CategoryRequest();
-								jsonResolver = new JSONResolver();
-								jsonObj = request.request(styleId, spaceId,
-										offset);
-								spaceIds = jsonResolver.getSpaceIds(jsonObj);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							offset = offset - 10;
 						}
+						progressBar.setVisibility(View.VISIBLE);
+						Runnable runnable = new RequestRunnable(styleId, spaceId, offset, m, mHandler);
+						Thread thread = new Thread(runnable);
+						thread.start();
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
+						
 						ln = l;
 						k = y;
-						try {
-							loadImage.loadImage(m, iv, viewFlipper, mActivity,
-									spaceIds);
-							SystemApplication.getInstance().setBitmapId(
-									spaceIds.get(m));
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
 				}
 			}
@@ -294,28 +278,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 					int l = n / 10 % 10;
 					if (l != lx) {
 						index = index + 10;
-						request = new CategoryRequest();
-						try {
-							jsonResolver = new JSONResolver();
-							jsonObj = request.request("0", "0", index);
-							spaceIds = jsonResolver.getSpaceIds(jsonObj);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
+					progressBar.setVisibility(View.VISIBLE);
+					Runnable runnable = new RequestRunnable("0", "0", index, m, mHandler);
+					Thread thread = new Thread(runnable);
+					thread.start();
+					SystemApplication.getInstance().setBitmapId(
+							spaceIds.get(m));
 					x = n;
 					lx = l;
 					lm = l;
-					try {
-						loadImage.loadImage(m, iv, viewFlipper, mActivity,
-								spaceIds);
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
 				}
 				// 选择了分类，查看下一张
 				else {
@@ -329,21 +302,26 @@ public class MainActivity extends Activity implements OnGestureListener {
 						y = k;
 						ly = l;
 						ln = l;
+						
+						
 						try {
 							spinnerInfo = cateConfirmButt.getSpinnerInfo(
 									mActivity, styles, spaces);
 							styleId = spinnerInfo.get("styleId");
 							spaceId = spinnerInfo.get("spaceId");
-							request = new CategoryRequest();
+							
+							progressBar.setVisibility(View.VISIBLE);
+							Runnable runnable = new RequestRunnable(styleId, spaceId, offset, m, mHandler);
+							Thread thread = new Thread(runnable);
+							thread.start();
+							SystemApplication.getInstance().setBitmapId(
+									spaceIds.get(m));
+							
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request(styleId, spaceId, offset);
 							availableResults = jsonResolver
 									.getAvailableResults(jsonObj);
-							spaceIds = jsonResolver.getSpaceIds(jsonObj);
-							loadImage.loadImage(m, iv, viewFlipper, mActivity,
-									spaceIds);
-							SystemApplication.getInstance().setBitmapId(
-									spaceIds.get(m));
+							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -400,9 +378,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 			.setPositiveButton("我要退出", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int whichButton) {
-
 					System.exit(0);
-
 				}
 
 			}).show();

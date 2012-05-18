@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.guju.Async.LoadImageTask;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
@@ -22,7 +23,6 @@ public class LoadImage {
 			viewFlipper.removeAllViews();
 			viewFlipper.addView(imageView);
 		} else {
-			new LoadImageTask().execute(imageId);
 			imageView.setImageBitmap(new LoadImageTask().execute(imageId).get());
 			imageView.setScaleType(ImageView.ScaleType.CENTER);
 			viewFlipper.removeAllViews();

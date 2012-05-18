@@ -1,4 +1,4 @@
-package android.guju.service;
+package android.guju.Async;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -6,6 +6,7 @@ import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.guju.service.SystemApplication;
 import android.os.AsyncTask;
 
 public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
