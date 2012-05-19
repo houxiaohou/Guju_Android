@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.guju.R;
 import android.guju.Async.AsyncLoadTask;
@@ -20,7 +21,6 @@ import android.guju.listener.SubmitButton;
 import android.guju.service.CategoryRequest;
 import android.guju.service.CheckNetInfo;
 import android.guju.service.JSONResolver;
-import android.guju.service.LoadImage;
 import android.guju.service.LoadLocalBitmap;
 import android.guju.service.SystemApplication;
 import android.guju.service.ToastLayout;
@@ -31,6 +31,9 @@ import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -64,7 +67,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 	private String styleId;
 	private String spaceId;
-	private LoadImage loadImage = new LoadImage();
 	private LoadLocalBitmap loadLocal = new LoadLocalBitmap();
 	private HashMap<String, String> spinnerInfo;
 	private CategoryRequest request;
@@ -392,5 +394,30 @@ public class MainActivity extends Activity implements OnGestureListener {
 		}
 
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+	MenuInflater inflater=getMenuInflater();
+	inflater.inflate(R.menu.menu, menu);//指定使用的XML
+	return true;
+    }
+	
+    /*处理菜单事件*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	int item_id=item.getItemId();//得到当前选中MenuItem的ID
+	switch(item_id){
+		case R.id.about:{
+			Intent intent = new Intent();
+			intent.setClass(getApplicationContext(), AboutActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		case R.id.exit:{
+			System.exit(0);
+		}
+	}
+	return true;
+    }
 
 }

@@ -19,4 +19,10 @@
     <string name="OK">确定</string>
     <string name="subInfo">登录成功！</string>
     <string name="categoryString">分类浏览</string>
+    <string name="aboutTitle">关于谷居</string>
+    <string name="aboutFirst">谷居—最酷的家家装图库</string>
+    <string name="aboutSecond">谷居聚焦于最酷、最时尚、最in的家居图片，为用户带来最优的网络家居体验。</string>
+    <string name="aboutThird">更多功能和精彩体验持续开发中，希望喜爱家居的你能持续关注谷居网站。</string>
+    <string name="website">http://www.guju.com.cn</string>
+    <string name="copyright">Copyright © 谷居 \n     版本号V1.0</string>
 </resources>
