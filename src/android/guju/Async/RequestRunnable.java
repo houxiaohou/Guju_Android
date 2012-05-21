@@ -40,6 +40,7 @@ public class RequestRunnable implements Runnable {
 			spaceIds = jsonResolver.getSpaceIds(jsonObj);
 			imageId = Integer.parseInt(spaceIds.get(n));
 			bitmap = new AsyncLoadTask(imageId).execute().get();
+			new AsyncLoadTask(imageId+1).execute().get();
 			handler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
 		} catch (Exception e) {
 			e.printStackTrace();

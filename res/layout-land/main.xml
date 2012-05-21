@@ -51,7 +51,7 @@
             android:id="@+id/confirmButt"
             android:layout_width="fill_parent"
             android:layout_height="75dip"
-            android:background="#9e7b5d"
+            android:background="@drawable/button"
             android:text="确\n定"
             android:textColor="#ffffff" />
     </LinearLayout>

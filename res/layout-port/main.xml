@@ -52,7 +52,7 @@
             android:id="@+id/confirmButt"
             android:layout_width="75dip"
             android:layout_height="fill_parent"
-            android:background="#9e7b5d"
+            android:background="@drawable/button"
             android:text="@string/OK"
             android:textColor="#ffffff" />
     </LinearLayout>
@@ -66,7 +66,7 @@
         <LinearLayout
             android:layout_width="159dip"
             android:layout_height="40dip"
-            android:background="#9e7b5d"
+            android:background="@drawable/button"
             android:orientation="horizontal" >
 
             <ImageView

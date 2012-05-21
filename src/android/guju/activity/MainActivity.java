@@ -87,8 +87,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private JSONObject jsonObj;
 	private JSONResolver jsonResolver;
 	private int availableResults = 2;
-	
-	
+
 	private static final int MSG_SUCCESS = 0;
 	private Bitmap bitmap;
 	private Thread mThread;
@@ -132,17 +131,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 		myIdeaButtonCtrl = new MyIdeaBookButton();
 		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, 0, iv, viewFlipper);
 
-		cateConfirmButt = new CateConfirmButton();
 		try {
-			cateConfirmButt.addCateButtonListener(mActivity, styles, spaces,
-					iv, viewFlipper);
-
-		} catch (Exception e1) {
+			cateConfirmButt = new CateConfirmButton(mActivity, styles, spaces,
+					iv, viewFlipper, progressBar);
+			cateConfirmButt.addCateButtonListener();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
+
 		progressBar.setVisibility(View.VISIBLE);
-		
+
 		mThread = new Thread(runnable);
 		mThread.start();
 
@@ -159,7 +158,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 				jsonObj = request.request("0", "0", index);
 				spaceIds = jsonResolver.getSpaceIds(jsonObj);
 				int imageId = Integer.parseInt(spaceIds.get(n));
-				bitmap  = new AsyncLoadTask(imageId).execute().get();
+				bitmap = new AsyncLoadTask(imageId).execute().get();
 				mHandler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
 
 			} catch (Exception e) {
@@ -169,13 +168,12 @@ public class MainActivity extends Activity implements OnGestureListener {
 		}
 
 	};
-	
+
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_SUCCESS:
-				progressBar.setVisibility(View.GONE);
 				iv = new ImageView(mActivity);
 				iv.setImageBitmap((Bitmap) msg.obj);
 				iv.setScaleType(ImageView.ScaleType.CENTER);
@@ -228,13 +226,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 						if (l != lm) {
 							index = index - 10;
 						}
-						progressBar.setVisibility(View.VISIBLE);
-						Runnable runnable = new RequestRunnable("0", "0", index, m, mHandler);
+						viewFlipper.removeView(iv);
+						viewFlipper.addView(progressBar);
+						Runnable runnable = new RequestRunnable("0", "0",
+								index, m, mHandler);
 						Thread thread = new Thread(runnable);
 						thread.start();
 						SystemApplication.getInstance().setBitmapId(
 								spaceIds.get(m));
-						
+
 						lm = l;
 						n = x;
 					}
@@ -250,13 +250,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 						if (l != ln) {
 							offset = offset - 10;
 						}
-						progressBar.setVisibility(View.VISIBLE);
-						Runnable runnable = new RequestRunnable(styleId, spaceId, offset, m, mHandler);
+						viewFlipper.removeView(iv);
+						viewFlipper.addView(progressBar);
+						Runnable runnable = new RequestRunnable(styleId,
+								spaceId, offset, m, mHandler);
 						Thread thread = new Thread(runnable);
 						thread.start();
 						SystemApplication.getInstance().setBitmapId(
 								spaceIds.get(m));
-						
+
 						ln = l;
 						k = y;
 					}
@@ -281,12 +283,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 					if (l != lx) {
 						index = index + 10;
 					}
-					progressBar.setVisibility(View.VISIBLE);
-					Runnable runnable = new RequestRunnable("0", "0", index, m, mHandler);
+					viewFlipper.removeView(iv);
+					viewFlipper.addView(progressBar);
+					Runnable runnable = new RequestRunnable("0", "0", index, m,
+							mHandler);
 					Thread thread = new Thread(runnable);
 					thread.start();
-					SystemApplication.getInstance().setBitmapId(
-							spaceIds.get(m));
+					SystemApplication.getInstance()
+							.setBitmapId(spaceIds.get(m));
 					x = n;
 					lx = l;
 					lm = l;
@@ -304,26 +308,27 @@ public class MainActivity extends Activity implements OnGestureListener {
 						y = k;
 						ly = l;
 						ln = l;
-						
-						
+
 						try {
 							spinnerInfo = cateConfirmButt.getSpinnerInfo(
 									mActivity, styles, spaces);
 							styleId = spinnerInfo.get("styleId");
 							spaceId = spinnerInfo.get("spaceId");
-							
-							progressBar.setVisibility(View.VISIBLE);
-							Runnable runnable = new RequestRunnable(styleId, spaceId, offset, m, mHandler);
+
+							viewFlipper.removeView(iv);
+							viewFlipper.addView(progressBar);
+							Runnable runnable = new RequestRunnable(styleId,
+									spaceId, offset, m, mHandler);
 							Thread thread = new Thread(runnable);
 							thread.start();
 							SystemApplication.getInstance().setBitmapId(
 									spaceIds.get(m));
-							
+
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request(styleId, spaceId, offset);
 							availableResults = jsonResolver
 									.getAvailableResults(jsonObj);
-							
+
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -394,30 +399,30 @@ public class MainActivity extends Activity implements OnGestureListener {
 		}
 
 	}
-	
+
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-	MenuInflater inflater=getMenuInflater();
-	inflater.inflate(R.menu.menu, menu);//指定使用的XML
-	return true;
-    }
-	
-    /*处理菜单事件*/
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	int item_id=item.getItemId();//得到当前选中MenuItem的ID
-	switch(item_id){
-		case R.id.about:{
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);// 指定使用的XML
+		return true;
+	}
+
+	/* 处理菜单事件 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int item_id = item.getItemId();// 得到当前选中MenuItem的ID
+		switch (item_id) {
+		case R.id.about: {
 			Intent intent = new Intent();
 			intent.setClass(getApplicationContext(), AboutActivity.class);
 			startActivity(intent);
 			finish();
 		}
-		case R.id.exit:{
+		case R.id.exit: {
 			System.exit(0);
 		}
+		}
+		return true;
 	}
-	return true;
-    }
 
 }

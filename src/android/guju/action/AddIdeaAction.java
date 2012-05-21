@@ -27,7 +27,7 @@ public class AddIdeaAction {
 		preferences = activity.getSharedPreferences("user_ideaBook",
 				Context.MODE_PRIVATE);
 
-		if (!preferences.contains(id)) {
+		if (!preferences.contains(id) && id != null) {
 			savePic(id, activity);
 			
 			Editor editor = preferences.edit();

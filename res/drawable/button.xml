@@ -1,37 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:constantSize="true">
-    <item android:state_focused="true">
+    <item android:state_pressed="true">
         <shape>
-            <gradient android:startColor="#FFE5CF33" android:endColor="#FFF1E7A2"
+            <gradient android:startColor="#7e5e42" android:endColor="#7e5e42"
                 android:angle="90.0">
             </gradient>
         </shape>
     </item>
-    <item android:state_enabled="true" android:state_pressed="false">
+    <item android:state_pressed="false">
         <shape>
-            <gradient android:startColor="#FF1B1B1B" android:endColor="#FF4A4A4A"
-                android:angle="90.0">
-            </gradient>
-        </shape>
-    </item>
-    <item android:state_enabled="true" android:state_pressed="true">
-        <shape>
-            <gradient android:startColor="#FF000000" android:endColor="#FF1A1A1A"
-                android:angle="90.0">
-            </gradient>
-        </shape>
-    </item>
-    <item android:state_enabled="false" android:state_pressed="true">
-        <shape>
-            <gradient android:startColor="#FF000000" android:endColor="#FF1A1A1A"
-                android:angle="90.0">
-            </gradient>
-        </shape>
-    </item>
-    <item>
-        <shape>
-            <gradient android:startColor="#FF000000" android:endColor="#FF1A1A1A"
+            <gradient android:startColor="#9e7b5d" android:endColor="#9e7b5d"
                 android:angle="90.0">
             </gradient>
         </shape>
