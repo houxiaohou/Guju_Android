@@ -5,7 +5,8 @@ import android.graphics.Bitmap;
 
 public class SystemApplication extends Application{
 	
-	private boolean isPressed ;
+	private boolean space;
+	private boolean style;
 	private boolean isMyIdea;
 	private LruCache<Integer,Bitmap> mMemoryCache;
 	private String cBitmapId;
@@ -17,12 +18,20 @@ public class SystemApplication extends Application{
 		return singleton;
 	}
 	
-	public void setStatus(boolean b){
-		isPressed = b;
+	public void setSpaceStatus(boolean b){
+		space = b;
 	}
 	
-	public boolean getStatus(){
-		return isPressed;
+	public boolean getSpaceStatus(){
+		return space;
+	}
+	
+	public void setStyleStatus(boolean b){
+		style = b;
+	}
+	
+	public boolean getStyleStatus(){
+		return style;
 	}
 	
 	public void setMyIdeaStatus(boolean b){
@@ -55,7 +64,8 @@ public class SystemApplication extends Application{
 	public void onCreate(){
 		super.onCreate();
 		singleton = this;
-		setStatus(false);
+		setStyleStatus(false);
+		setSpaceStatus(false);
 	    mMemoryCache = new LruCache<Integer,Bitmap>(10);
 	}
 	

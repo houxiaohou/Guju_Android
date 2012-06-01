@@ -13,10 +13,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.guju.R;
 import android.guju.Async.AsyncLoadTask;
+import android.guju.Async.LoadImageTask;
 import android.guju.Async.RequestRunnable;
 import android.guju.listener.AddIdeaButton;
-import android.guju.listener.CateConfirmButton;
 import android.guju.listener.MyIdeaBookButton;
+import android.guju.listener.SpinnerListener;
 import android.guju.listener.SubmitButton;
 import android.guju.service.CategoryRequest;
 import android.guju.service.CheckNetInfo;
@@ -28,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -46,18 +48,18 @@ import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements OnGestureListener {
 
-	private static final String[] styles = { "全部风格", "地中海式", "日韩亚洲", "现代简约",
-			"当代美学", "复古传统", "折衷主义", "热带风情" };
-	private static final String[] spaces = { "全部空间", "浴室", "卧室", "壁橱", "餐厅",
-			"玄关", "室外景观", "客厅", "大厅", "书房", "儿童房", "厨房", "景观", "洗衣间", "起居室",
-			"媒体室", "露台", "游泳池", "走廊", "化妆间", "楼梯", "酒架" };
+	private static final String[] styles = { "全部风格", "地中海风情", "东方风韵", "现代主义",
+			"当代风格", "传统格调", "折中主义", "热带风情" };
+	private static final String[] spaces = { "全部空间", "浴室", "卧室", "更衣间", "餐厅",
+			"玄关", "外景", "活动室", "走廊", "书房", "儿童房", "厨房", "园艺", "洗衣房", "客厅",
+			"家庭影院", "庭院", "池", "阳台", "化妆间", "楼梯", "酒窖" };
 	private GestureDetector gestureDetector = null;
 	private Activity mActivity = null;
 	private ImageView iv;
 	private ViewFlipper viewFlipper;
 	private SubmitButton buttonCtrl = null;
 	private AddIdeaButton addIdeaButtonCtrl = null;
-	private CateConfirmButton cateConfirmButt = null;
+	private SpinnerListener spListener = null;
 	private MyIdeaBookButton myIdeaButtonCtrl = null;
 	private Spinner spaceSpinner;
 	private Spinner styleSpinner;
@@ -83,6 +85,12 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private int offset = 0;
 	private int ly = 0;
 	private int ln;
+	
+	private int o = 0;
+	private int p = 0;
+	private int set = 0;
+	private int lp = 0;
+	private int lo;
 
 	private JSONObject jsonObj;
 	private JSONResolver jsonResolver;
@@ -101,7 +109,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 		setContentView(R.layout.main);
 		SystemApplication.getInstance().setMyIdeaStatus(false);
 		mActivity = this;
-
+		iv = new ImageView(mActivity);
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 		progressBar = (ProgressBar) findViewById(R.id.proBar);
 
@@ -131,14 +139,16 @@ public class MainActivity extends Activity implements OnGestureListener {
 		myIdeaButtonCtrl = new MyIdeaBookButton();
 		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, 0, iv, viewFlipper);
 
-		try {
-			cateConfirmButt = new CateConfirmButton(mActivity, styles, spaces,
-					iv, viewFlipper, progressBar);
-			cateConfirmButt.addCateButtonListener();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/**
+		 * try { cateConfirmButt = new CateConfirmButton(mActivity, styles,
+		 * spaces, iv, viewFlipper, progressBar);
+		 * cateConfirmButt.addCateButtonListener(); } catch (Exception e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); }
+		 */
+
+		spListener = new SpinnerListener(mActivity, styles, spaces, iv,
+				viewFlipper, progressBar);
+		spListener.clickListener();
 
 		progressBar.setVisibility(View.VISIBLE);
 
@@ -158,8 +168,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 				jsonObj = request.request("0", "0", index);
 				spaceIds = jsonResolver.getSpaceIds(jsonObj);
 				int imageId = Integer.parseInt(spaceIds.get(n));
-				bitmap = new AsyncLoadTask(imageId).execute().get();
-				mHandler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
+				bitmap = SystemApplication.getInstance()
+						.getBitmapFromMemCache(imageId);
+				if (bitmap != null) {
+					mHandler.obtainMessage(MSG_SUCCESS, bitmap)
+							.sendToTarget();
+					Log.i("imageId", Integer.toString(imageId));
+				} else {
+					bitmap = new LoadImageTask().execute(imageId).get();
+					mHandler.obtainMessage(MSG_SUCCESS, bitmap)
+					.sendToTarget();
+				}
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -177,7 +196,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 				iv = new ImageView(mActivity);
 				iv.setImageBitmap((Bitmap) msg.obj);
 				iv.setScaleType(ImageView.ScaleType.CENTER);
-				viewFlipper.removeAllViews();
+				viewFlipper.removeAllViews();	
 				viewFlipper.addView(iv);
 				break;
 			}
@@ -206,17 +225,21 @@ public class MainActivity extends Activity implements OnGestureListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		if (e2.getX() - e1.getX() > 80) {
-			boolean status = SystemApplication.getInstance().getStatus();
+			boolean styleStatus = SystemApplication.getInstance()
+					.getStyleStatus();
+			boolean spaceStatus = SystemApplication.getInstance()
+					.getSpaceStatus();
 			boolean isMyIdea = SystemApplication.getInstance()
 					.getMyIdeaStatus();
 			if (isMyIdea) {
 				SystemApplication.getInstance().njian();
 				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
-				SystemApplication.getInstance().setStatus(false);
+				SystemApplication.getInstance().setStyleStatus(false);
+				SystemApplication.getInstance().setSpaceStatus(false);
 			} else {
 				// 没有选择分类，查看上一张
-				if (!status) {
+				if (styleStatus == false && spaceStatus == false) {
 					if (x == 0) {
 						new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
 					} else if (x > 0) {
@@ -226,6 +249,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 						if (l != lm) {
 							index = index - 10;
 						}
+						viewFlipper.setOutAnimation(getApplicationContext(),R.anim.push_left_out);
 						viewFlipper.removeView(iv);
 						viewFlipper.addView(progressBar);
 						Runnable runnable = new RequestRunnable("0", "0",
@@ -239,8 +263,9 @@ public class MainActivity extends Activity implements OnGestureListener {
 						n = x;
 					}
 				}
-				// 选择了分类，查看上一张
-				else {
+				// 选择了一个分类，查看上一张
+				else if ((styleStatus == true && spaceStatus == false)
+						|| (styleStatus == false && spaceStatus == true)) {
 					if (y == 0) {
 						new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
 					} else if (y > 0) {
@@ -263,27 +288,55 @@ public class MainActivity extends Activity implements OnGestureListener {
 						k = y;
 					}
 				}
+				// 选择了两个分类，查看上一张
+				else if (styleStatus && spaceStatus) {
+					if (p == 0) {
+						new ToastLayout().showToast(mActivity, "前面没有了哦亲~");
+					} else if (p > 0) {
+						p--;
+						int m = p % 10;
+						int l = p / 10 % 10;
+						if (l != lo) {
+							set = set - 10;
+						}
+						viewFlipper.removeView(iv);
+						viewFlipper.addView(progressBar);
+						Runnable runnable = new RequestRunnable(styleId,
+								spaceId, set, m, mHandler);
+						Thread thread = new Thread(runnable);
+						thread.start();
+						SystemApplication.getInstance().setBitmapId(
+								spaceIds.get(m));
+
+						lo = l;
+						o = p;
+					}
+				}
 			}
-			return true;
 		} else if (e2.getX() - e1.getX() < -80) {
-			boolean status = SystemApplication.getInstance().getStatus();
+			boolean styleStatus = SystemApplication.getInstance()
+					.getStyleStatus();
+			boolean spaceStatus = SystemApplication.getInstance()
+					.getSpaceStatus();
 			boolean isMyIdea = SystemApplication.getInstance()
 					.getMyIdeaStatus();
 			if (isMyIdea) {
 				SystemApplication.getInstance().njia();
 				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
-				SystemApplication.getInstance().setStatus(false);
+				SystemApplication.getInstance().setStyleStatus(false);
+				SystemApplication.getInstance().setSpaceStatus(false);
 			} else {
 				// 没有选择分类，查看下一张
-				if (!status) {
+				if (styleStatus == false && spaceStatus == false) {
 					n++;
 					int m = n % 10;
 					int l = n / 10 % 10;
 					if (l != lx) {
 						index = index + 10;
 					}
-					viewFlipper.removeView(iv);
+					
+					viewFlipper.removeAllViews();
 					viewFlipper.addView(progressBar);
 					Runnable runnable = new RequestRunnable("0", "0", index, m,
 							mHandler);
@@ -296,8 +349,9 @@ public class MainActivity extends Activity implements OnGestureListener {
 					lm = l;
 
 				}
-				// 选择了分类，查看下一张
-				else {
+				// 选择了一个分类，查看下一张
+				else if ((styleStatus == true && spaceStatus == false)
+						|| (styleStatus == false && spaceStatus == true)) {
 					k++;
 					if (k <= availableResults - 1) {
 						int m = k % 10;
@@ -310,8 +364,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 						ln = l;
 
 						try {
-							spinnerInfo = cateConfirmButt.getSpinnerInfo(
-									mActivity, styles, spaces);
+							spinnerInfo = spListener.clickListener();
 							styleId = spinnerInfo.get("styleId");
 							spaceId = spinnerInfo.get("spaceId");
 
@@ -336,10 +389,48 @@ public class MainActivity extends Activity implements OnGestureListener {
 					} else {
 						new ToastLayout().showToast(mActivity, "最后一张了哦~");
 					}
+				} 
+				//选择了两个分类，查看下一张
+				else if (styleStatus && spaceStatus) {
+					o++;
+					if (o <= availableResults - 1) {
+						int m = o % 10;
+						int l = o / 10 % 10;
+						if (l != lp) {
+							set = set + 10;
+						}
+						p = o;
+						lp = l;
+						lo = l;
 
+						try {
+							spinnerInfo = spListener.clickListener();
+							styleId = spinnerInfo.get("styleId");
+							spaceId = spinnerInfo.get("spaceId");
+
+							viewFlipper.removeView(iv);
+							viewFlipper.addView(progressBar);
+							Runnable runnable = new RequestRunnable(styleId,
+									spaceId, set, m, mHandler);
+							Thread thread = new Thread(runnable);
+							thread.start();
+							SystemApplication.getInstance().setBitmapId(
+									spaceIds.get(m));
+
+							jsonResolver = new JSONResolver();
+							jsonObj = request.request(styleId, spaceId, set);
+							availableResults = jsonResolver
+									.getAvailableResults(jsonObj);
+
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						new ToastLayout().showToast(mActivity, "最后一张了哦~");
+					}
 				}
 			}
-			return true;
 		}
 		return true;
 	}

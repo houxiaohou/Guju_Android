@@ -21,15 +21,15 @@ public class ImageCache {
 	    return cache;
 	}
 	
-	public void addBitmapToCache(int key, Bitmap bitmap){
+	public void add(int key, Bitmap bitmap){
 		cleanCache(key-2);
 		cleanCache(key+2);
-		if(getBitmapCache(key) == null){
+		if(get(key) == null){
 			softCache.put(key, bitmap);
 		}
 	}
 	
-	public Bitmap getBitmapCache(int key){
+	public Bitmap get(int key){
 		return softCache.get(key);
 	}
 	

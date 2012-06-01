@@ -11,20 +11,18 @@ import android.guju.R;
 import android.guju.action.LoginAction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 public class SubmitButton {
 	
 
-	private Button registerButton;
 	private RegisterButton submitButton = null;
 	private LoginAction loginAction = null;
 	
 	public void submitListener(final Activity activity){
 		
-		registerButton = (Button) activity.findViewById(R.id.addidea);
+		View view = (View) activity.findViewById(R.id.addidea);
 		
-		registerButton.setOnClickListener(new Button.OnClickListener(){
+		view.setOnClickListener(new View.OnClickListener(){
 			
 			
 

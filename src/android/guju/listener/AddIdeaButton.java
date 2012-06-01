@@ -6,26 +6,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
 import android.guju.R;
 import android.guju.action.AddIdeaAction;
 import android.guju.action.LoginAction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 public class AddIdeaButton {
 
-	private Button addIdeaButton = null;
 	private LoginAction loginAction = null;
 	private RegisterButton submitButton = null;
 	private SharedPreferences preferences = null;
 
 	public void addIdeaButtonListener(final Activity activity) {
 
-		addIdeaButton = (Button) activity.findViewById(R.id.addidea);
-		addIdeaButton.setOnClickListener(new Button.OnClickListener() {
+		View addIdeaButton = (View) activity.findViewById(R.id.addidea);
+		addIdeaButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

@@ -1,13 +1,19 @@
 package android.guju.Async;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.guju.service.CategoryRequest;
 import android.guju.service.JSONResolver;
+import android.guju.service.SystemApplication;
 import android.os.Handler;
+import android.util.Log;
 
 public class RequestRunnable implements Runnable {
 
@@ -39,9 +45,33 @@ public class RequestRunnable implements Runnable {
 			jsonObj = request.request(styleId, spaceId, index);
 			spaceIds = jsonResolver.getSpaceIds(jsonObj);
 			imageId = Integer.parseInt(spaceIds.get(n));
-			bitmap = new AsyncLoadTask(imageId).execute().get();
-			new AsyncLoadTask(imageId+1).execute().get();
-			handler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
+			bitmap = SystemApplication.getInstance()
+					.getBitmapFromMemCache(imageId);
+			if (bitmap != null) {
+				handler.obtainMessage(MSG_SUCCESS, bitmap)
+						.sendToTarget();
+				Log.i("imageId", Integer.toString(imageId));
+			} else {
+				URL imgUrl = null;
+				try {
+					imgUrl = new URL("http://www.guju.com.cn/gimages/" + imageId
+							+ "_0_9-.jpg");
+					HttpURLConnection conn = (HttpURLConnection) imgUrl
+							.openConnection();
+					conn.connect();
+					InputStream is = conn.getInputStream();
+					BitmapFactory.Options ops = new BitmapFactory.Options();
+					ops.inSampleSize = 3;
+					bitmap = BitmapFactory.decodeStream(is, null, ops);
+					SystemApplication.getInstance().addBitmapToMemoryCache(imageId,
+							bitmap);
+					is.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				handler.obtainMessage(MSG_SUCCESS, bitmap)
+				.sendToTarget();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
