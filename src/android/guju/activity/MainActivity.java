@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.guju.R;
-import android.guju.Async.AsyncLoadTask;
 import android.guju.Async.LoadImageTask;
 import android.guju.Async.RequestRunnable;
 import android.guju.listener.AddIdeaButton;
@@ -99,7 +98,10 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private static final int MSG_SUCCESS = 0;
 	private Bitmap bitmap;
 	private Thread mThread;
-
+	
+	private CheckNetInfo checkNet;
+	private boolean netStatus;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,14 +109,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);
-		SystemApplication.getInstance().setMyIdeaStatus(false);
+		
 		mActivity = this;
 		iv = new ImageView(mActivity);
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
 		progressBar = (ProgressBar) findViewById(R.id.proBar);
 
-		CheckNetInfo checkNet = new CheckNetInfo();
-		checkNet.checkNet(mActivity, iv, viewFlipper, 0);
+		checkNet = new CheckNetInfo();
+		netStatus = checkNet.checkNet(mActivity, iv, viewFlipper, 0);
 
 		styleSpinner = (Spinner) findViewById(R.id.style);
 		styleAdapter = new ArrayAdapter<String>(this, R.layout.spinnerselected,
@@ -138,13 +140,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 		myIdeaButtonCtrl = new MyIdeaBookButton();
 		myIdeaButtonCtrl.addMyIdeaButtonListener(mActivity, 0, iv, viewFlipper);
-
-		/**
-		 * try { cateConfirmButt = new CateConfirmButton(mActivity, styles,
-		 * spaces, iv, viewFlipper, progressBar);
-		 * cateConfirmButt.addCateButtonListener(); } catch (Exception e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); }
-		 */
 
 		spListener = new SpinnerListener(mActivity, styles, spaces, iv,
 				viewFlipper, progressBar);
@@ -226,12 +221,18 @@ public class MainActivity extends Activity implements OnGestureListener {
 			float velocityY) {
 		if (e2.getX() - e1.getX() > 80) {
 			boolean styleStatus = SystemApplication.getInstance()
-					.getStyleStatus();
+					.isStyleStatus();
 			boolean spaceStatus = SystemApplication.getInstance()
-					.getSpaceStatus();
+					.isSpaceStatus();
 			boolean isMyIdea = SystemApplication.getInstance()
-					.getMyIdeaStatus();
+					.isMyIdeaStatus();
 			if (isMyIdea) {
+				SystemApplication.getInstance().njian();
+				int i = SystemApplication.getInstance().getValueOfn();
+				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
+				SystemApplication.getInstance().setStyleStatus(false);
+				SystemApplication.getInstance().setSpaceStatus(false);
+			} else if (netStatus) {
 				SystemApplication.getInstance().njian();
 				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
@@ -315,12 +316,18 @@ public class MainActivity extends Activity implements OnGestureListener {
 			}
 		} else if (e2.getX() - e1.getX() < -80) {
 			boolean styleStatus = SystemApplication.getInstance()
-					.getStyleStatus();
+					.isStyleStatus();
 			boolean spaceStatus = SystemApplication.getInstance()
-					.getSpaceStatus();
+					.isSpaceStatus();
 			boolean isMyIdea = SystemApplication.getInstance()
-					.getMyIdeaStatus();
+					.isMyIdeaStatus();
 			if (isMyIdea) {
+				SystemApplication.getInstance().njia();
+				int i = SystemApplication.getInstance().getValueOfn();
+				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);
+				SystemApplication.getInstance().setStyleStatus(false);
+				SystemApplication.getInstance().setSpaceStatus(false);
+			} else if (netStatus) {
 				SystemApplication.getInstance().njia();
 				int i = SystemApplication.getInstance().getValueOfn();
 				loadLocal.loadLocalPic(mActivity, iv, viewFlipper, i);

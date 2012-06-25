@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 
 public class SystemApplication extends Application{
 	
-	private boolean space;
-	private boolean style;
-	private boolean isMyIdea;
+	private boolean spaceStatus;
+	private boolean styleStatus;
+	private boolean myIdeaStatus;
 	private LruCache<Integer,Bitmap> mMemoryCache;
 	private String cBitmapId;
 	private int n = 0;
@@ -18,30 +18,32 @@ public class SystemApplication extends Application{
 		return singleton;
 	}
 	
-	public void setSpaceStatus(boolean b){
-		space = b;
+	public boolean isSpaceStatus() {
+		return spaceStatus;
+	}
+
+	public void setSpaceStatus(boolean spaceStatus) {
+		this.spaceStatus = spaceStatus;
+	}
+
+	public boolean isStyleStatus() {
+		return styleStatus;
+	}
+
+
+
+	public void setStyleStatus(boolean styleStatus) {
+		this.styleStatus = styleStatus;
 	}
 	
-	public boolean getSpaceStatus(){
-		return space;
+	public boolean isMyIdeaStatus() {
+		return myIdeaStatus;
 	}
-	
-	public void setStyleStatus(boolean b){
-		style = b;
+
+	public void setMyIdeaStatus(boolean myIdeaStatus) {
+		this.myIdeaStatus = myIdeaStatus;
 	}
-	
-	public boolean getStyleStatus(){
-		return style;
-	}
-	
-	public void setMyIdeaStatus(boolean b){
-		isMyIdea = b;
-	}
-	
-	public boolean getMyIdeaStatus(){
-		return isMyIdea;
-	}
-	
+
 	public int getValueOfn(){
 		return n;
 	}
@@ -56,7 +58,7 @@ public class SystemApplication extends Application{
 	}
 	
 	public int njian(){
-		n = n -1;
+		n = n - 1;
 		return n;
 	}
 	
@@ -66,6 +68,7 @@ public class SystemApplication extends Application{
 		singleton = this;
 		setStyleStatus(false);
 		setSpaceStatus(false);
+		setMyIdeaStatus(false);
 	    mMemoryCache = new LruCache<Integer,Bitmap>(10);
 	}
 	

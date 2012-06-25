@@ -4,7 +4,6 @@
     android:layout_height="159dip"
     android:textColor="#ffffff"
     android:padding="12dip"
-    android:gravity="center"
     android:background="@drawable/spinner1" >
     
 
