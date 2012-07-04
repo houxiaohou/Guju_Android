@@ -31,11 +31,15 @@ public class AddIdeaButton {
 						Context.MODE_PRIVATE);
 				String email = preferences.getString("email", "");
 				String password = preferences.getString("password", "");
+				String galleryId = preferences.getString("galleryId", "");
 				if (email.length() != 0 && email != null && password != null
 						&& password.length() != 0) {
 					try {
-						new AddIdeaAction().addIdea(activity);
-					} catch (IOException e) {
+						if (galleryId.length() == 0 || galleryId == null)
+							new AddIdeaAction().addIdea(activity, email, "0");
+						else if (galleryId != null && galleryId.length() != 0)
+							new AddIdeaAction().addIdea(activity, email, galleryId);
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

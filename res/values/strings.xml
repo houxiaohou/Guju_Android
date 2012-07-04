@@ -25,4 +25,6 @@
     <string name="aboutThird">更多功能和精彩体验持续开发中，希望喜爱家居的你能持续关注谷居网站。</string>
     <string name="website">http://www.guju.com.cn</string>
     <string name="copyright">Copyright © 谷居 \n     版本号V1.0</string>
+    <string name="usernameOrEmail">输入用户名或邮箱</string>
+    
 </resources>
