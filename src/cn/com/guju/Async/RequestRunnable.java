@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import cn.com.guju.service.CategoryRequest;
 import cn.com.guju.service.JSONResolver;
 import cn.com.guju.service.SystemApplication;
+import cn.com.guju.service.SystemConstant;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,14 +56,14 @@ public class RequestRunnable implements Runnable {
 			} else {
 				URL imgUrl = null;
 				try {
-					imgUrl = new URL("http://www.guju.com.cn/gimages/" + imageId
-							+ "_0_9-.jpg");
+					imgUrl = new URL(SystemConstant.BASE_URL+SystemConstant.SIMAGES+ imageId
+							+ SystemConstant.PHOTO_VERSION);
 					HttpURLConnection conn = (HttpURLConnection) imgUrl
 							.openConnection();
 					conn.connect();
 					InputStream is = conn.getInputStream();
 					BitmapFactory.Options ops = new BitmapFactory.Options();
-					ops.inSampleSize = 3;
+					ops.inSampleSize = 1;
 					bitmap = BitmapFactory.decodeStream(is, null, ops);
 					SystemApplication.getInstance().addBitmapToMemoryCache(imageId,
 							bitmap);

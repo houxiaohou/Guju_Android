@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import cn.com.guju.service.SystemApplication;
+import cn.com.guju.service.SystemConstant;
 import cn.com.guju.service.ToastLayout;
 
 import android.app.Activity;
@@ -51,7 +52,7 @@ public class AddIdeaAction {
 			File imageFile = new File(path + id + ".jpg");
 			Bitmap bitmap = null;
 			try {
-				URL imgUrl = new URL("http://www.guju.com.cn/gimages/" + id
+				URL imgUrl = new URL(SystemConstant.BASE_URL+ SystemConstant.SIMAGES + id
 						+ "_0_9-.jpg");
 				HttpURLConnection conn = (HttpURLConnection) imgUrl
 						.openConnection();

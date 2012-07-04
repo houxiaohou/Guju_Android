@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import cn.com.guju.R;
+import cn.com.guju.service.SystemConstant;
 import cn.com.guju.service.ToastLayout;
 
 public class RegisterAction {
@@ -39,7 +40,7 @@ public class RegisterAction {
 				String enEmail = URLEncoder.encode(email, HTTP.UTF_8);
 				String enUser = URLEncoder.encode(username, HTTP.UTF_8);
 				String enPass = URLEncoder.encode(password, HTTP.UTF_8);
-				String requestUrl = "http://www.guju.com.cn/authorize/u="
+				String requestUrl = SystemConstant.BASE_URL+SystemConstant.AUTHORIZE+"u="
 						+ enUser + "/e=" + enEmail + "/pwd=" + enPass
 						+ "/t=1/k=/f=/l=/op=c/__=1336014768901/ajaxRequestId=4";
 				HttpPost httpRequest = new HttpPost(requestUrl);

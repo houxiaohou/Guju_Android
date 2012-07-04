@@ -19,6 +19,7 @@ import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.widget.EditText;
 import cn.com.guju.R;
+import cn.com.guju.service.SystemConstant;
 import cn.com.guju.service.ToastLayout;
 
 public class LoginAction {
@@ -35,7 +36,7 @@ public class LoginAction {
 			try {
 				String enEmail = URLEncoder.encode(email, HTTP.UTF_8);
 				String enPass = URLEncoder.encode(password, HTTP.UTF_8);
-				String requestUrl = "http://guju.com.cn/authorize/u="+enEmail+"/pwd="+enPass+"/k=y/op=l";
+				String requestUrl = SystemConstant.BASE_URL+SystemConstant.AUTHORIZE+"u="+enEmail+"/pwd="+enPass+"/k=y/op=l";
 				HttpPost httpRequest = new HttpPost(requestUrl);
 				HttpResponse httpResponse = new DefaultHttpClient()
 						.execute(httpRequest);

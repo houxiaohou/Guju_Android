@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import cn.com.guju.service.SystemApplication;
+import cn.com.guju.service.SystemConstant;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,14 +38,14 @@ public class LoadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
 		Bitmap bitmap = null;
 
 		try {
-			imgUrl = new URL("http://www.guju.com.cn/gimages/" + n
-					+ "_0_9-.jpg");
+			imgUrl = new URL(SystemConstant.BASE_URL+SystemConstant.SIMAGES + n
+					+ SystemConstant.PHOTO_VERSION);
 			HttpURLConnection conn = (HttpURLConnection) imgUrl
 					.openConnection();
 			conn.connect();
 			InputStream is = conn.getInputStream();
 			BitmapFactory.Options ops = new BitmapFactory.Options();
-			ops.inSampleSize = 3;
+			ops.inSampleSize = 1;
 			bitmap = BitmapFactory.decodeStream(is, null, ops);
 			SystemApplication.getInstance().addBitmapToMemoryCache(n, bitmap);
 			is.close();

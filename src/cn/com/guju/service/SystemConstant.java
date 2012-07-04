@@ -5,6 +5,13 @@ import java.util.Map;
 
 public class SystemConstant {
 	
+	
+	public static String BASE_URL = "http://www.guju.com.cn:8080";
+	public static String CATEGORY_REQUEST = "/getFeaturedSpaces/offset=";
+	public static String SIMAGES = "/simages/";
+	public static String AUTHORIZE = "/authorize/";
+	public static String PHOTO_VERSION = "_0_8-.jpg";
+	
 	public final static Map<String, String> STYLES_ID_MAP = new LinkedHashMap<String, String>(){
 
 		/**
