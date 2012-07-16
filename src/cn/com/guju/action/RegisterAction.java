@@ -60,7 +60,6 @@ public class RegisterAction {
 						Editor editor = sharedPreferences.edit();
 						editor.putString("email", email);
 						editor.putString("username", username);
-						editor.putString("password", password);
 						editor.commit();
 						
 					}else if(error.equals("1")){

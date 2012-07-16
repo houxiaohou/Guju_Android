@@ -12,7 +12,6 @@ import java.net.URLEncoder;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
@@ -33,7 +32,7 @@ public class AddIdeaAction {
 			throws Exception {
 		String id = SystemApplication.getInstance().getBitmapId();
 		String gtitle = "我的手机灵感集";
-		String enGtitle = URLEncoder.encode(gtitle, HTTP.UTF_8);
+		String enGtitle = URLEncoder.encode(gtitle);
 		String requestUrl = SystemConstant.BASE_URL
 				+ SystemConstant.ADDIDEABOOK + "email=" + email + "&id=" + id
 				+ "&gtitle=" + enGtitle + "&gid=" + galleryId;
@@ -87,7 +86,7 @@ public class AddIdeaAction {
 				conn.connect();
 				InputStream is = conn.getInputStream();
 				BitmapFactory.Options ops = new BitmapFactory.Options();
-				ops.inSampleSize = 3;
+				ops.inSampleSize = 1;
 				bitmap = BitmapFactory.decodeStream(is, null, ops);
 			} catch (Exception e) {
 				e.printStackTrace();

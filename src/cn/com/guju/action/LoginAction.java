@@ -55,7 +55,6 @@ public class LoginAction {
 						SharedPreferences sharedPreferences = activity.getSharedPreferences("GujuAPP_userInfo", Context.MODE_PRIVATE);
 						Editor editor = sharedPreferences.edit();
 						editor.putString("email", email);
-						editor.putString("password", password);
 						editor.commit();
 					}else if(error.equals("6")){
 						new AlertDialog.Builder(activity)

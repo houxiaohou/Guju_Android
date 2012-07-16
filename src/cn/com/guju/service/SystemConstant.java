@@ -6,7 +6,7 @@ import java.util.Map;
 public class SystemConstant {
 	
 	
-	public static String BASE_URL = "http://www.guju.com.cn:8080";
+	public static String BASE_URL = "http://www.guju.com.cn";
 	public static String CATEGORY_REQUEST = "/getFeaturedSpaces/offset=";
 	public static String SIMAGES = "/simages/";
 	public static String AUTHORIZE = "/authorize/";

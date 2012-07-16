@@ -30,10 +30,8 @@ public class AddIdeaButton {
 				preferences = activity.getSharedPreferences("GujuAPP_userInfo",
 						Context.MODE_PRIVATE);
 				String email = preferences.getString("email", "");
-				String password = preferences.getString("password", "");
 				String galleryId = preferences.getString("galleryId", "");
-				if (email.length() != 0 && email != null && password != null
-						&& password.length() != 0) {
+				if (email.length() != 0 && email != null ) {
 					try {
 						if (galleryId.length() == 0 || galleryId == null)
 							new AddIdeaAction().addIdea(activity, email, "0");
