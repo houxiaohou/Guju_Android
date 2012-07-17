@@ -1,5 +1,7 @@
 package cn.com.guju.service;
 
+import java.util.ArrayList;
+
 import android.app.Application;
 import android.graphics.Bitmap;
 
@@ -9,6 +11,7 @@ public class SystemApplication extends Application{
 	private boolean styleStatus;
 	private boolean myIdeaStatus;
 	private LruCache<Integer,Bitmap> mMemoryCache;
+	private ArrayList<String> spaceIds;
 	private String cBitmapId;
 	private int n = 0;
 	
@@ -62,6 +65,14 @@ public class SystemApplication extends Application{
 		return n;
 	}
 	
+	public ArrayList<String> getSpaceIds() {
+		return spaceIds;
+	}
+
+	public void setSpaceIds(ArrayList<String> spaceIds) {
+		this.spaceIds = spaceIds;
+	}
+
 	@Override
 	public void onCreate(){
 		super.onCreate();

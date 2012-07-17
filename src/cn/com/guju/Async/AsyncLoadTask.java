@@ -45,9 +45,7 @@ public class AsyncLoadTask extends AsyncTask<Integer, Integer, Bitmap> {
 						.openConnection();
 				conn.connect();
 				InputStream is = conn.getInputStream();
-				BitmapFactory.Options ops = new BitmapFactory.Options();
-				ops.inSampleSize = 1;
-				bitmap = BitmapFactory.decodeStream(is, null, ops);
+				bitmap = BitmapFactory.decodeStream(is);
 				SystemApplication.getInstance().addBitmapToMemoryCache(n,
 						bitmap);
 				is.close();

@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -84,7 +83,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private int offset = 0;
 	private int ly = 0;
 	private int ln;
-	
+
 	private int o = 0;
 	private int p = 0;
 	private int set = 0;
@@ -98,18 +97,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private static final int MSG_SUCCESS = 0;
 	private Bitmap bitmap;
 	private Thread mThread;
-	
+
 	private CheckNetInfo checkNet;
 	private boolean netStatus;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.main);
-		
+
 		mActivity = this;
 		iv = new ImageView(mActivity);
 		viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
@@ -163,16 +161,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 				jsonObj = request.request("0", "0", index);
 				spaceIds = jsonResolver.getSpaceIds(jsonObj);
 				int imageId = Integer.parseInt(spaceIds.get(n));
-				bitmap = SystemApplication.getInstance()
-						.getBitmapFromMemCache(imageId);
+				bitmap = SystemApplication.getInstance().getBitmapFromMemCache(
+						imageId);
 				if (bitmap != null) {
-					mHandler.obtainMessage(MSG_SUCCESS, bitmap)
-							.sendToTarget();
+					mHandler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
 					Log.i("imageId", Integer.toString(imageId));
 				} else {
 					bitmap = new LoadImageTask().execute(imageId).get();
-					mHandler.obtainMessage(MSG_SUCCESS, bitmap)
-					.sendToTarget();
+					mHandler.obtainMessage(MSG_SUCCESS, bitmap).sendToTarget();
 				}
 
 			} catch (Exception e) {
@@ -191,7 +187,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 				iv = new ImageView(mActivity);
 				iv.setImageBitmap((Bitmap) msg.obj);
 				iv.setScaleType(ImageView.ScaleType.CENTER);
-				viewFlipper.removeAllViews();	
+				viewFlipper.removeAllViews();
 				viewFlipper.addView(iv);
 				break;
 			}
@@ -224,8 +220,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 					.isStyleStatus();
 			boolean spaceStatus = SystemApplication.getInstance()
 					.isSpaceStatus();
-			boolean isMyIdea = SystemApplication.getInstance()
-					.isMyIdeaStatus();
+			boolean isMyIdea = SystemApplication.getInstance().isMyIdeaStatus();
 			if (isMyIdea) {
 				SystemApplication.getInstance().njian();
 				int i = SystemApplication.getInstance().getValueOfn();
@@ -250,15 +245,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 						if (l != lm) {
 							index = index - 10;
 						}
-						viewFlipper.setOutAnimation(getApplicationContext(),R.anim.push_left_out);
+						viewFlipper.setOutAnimation(getApplicationContext(),
+								R.anim.push_left_out);
 						viewFlipper.removeView(iv);
 						viewFlipper.addView(progressBar);
 						Runnable runnable = new RequestRunnable("0", "0",
 								index, m, mHandler);
 						Thread thread = new Thread(runnable);
 						thread.start();
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
 
 						lm = l;
 						n = x;
@@ -282,8 +276,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 								spaceId, offset, m, mHandler);
 						Thread thread = new Thread(runnable);
 						thread.start();
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
 
 						ln = l;
 						k = y;
@@ -306,8 +298,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 								spaceId, set, m, mHandler);
 						Thread thread = new Thread(runnable);
 						thread.start();
-						SystemApplication.getInstance().setBitmapId(
-								spaceIds.get(m));
 
 						lo = l;
 						o = p;
@@ -319,8 +309,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 					.isStyleStatus();
 			boolean spaceStatus = SystemApplication.getInstance()
 					.isSpaceStatus();
-			boolean isMyIdea = SystemApplication.getInstance()
-					.isMyIdeaStatus();
+			boolean isMyIdea = SystemApplication.getInstance().isMyIdeaStatus();
 			if (isMyIdea) {
 				SystemApplication.getInstance().njia();
 				int i = SystemApplication.getInstance().getValueOfn();
@@ -342,15 +331,14 @@ public class MainActivity extends Activity implements OnGestureListener {
 					if (l != lx) {
 						index = index + 10;
 					}
-					
 					viewFlipper.removeAllViews();
 					viewFlipper.addView(progressBar);
 					Runnable runnable = new RequestRunnable("0", "0", index, m,
 							mHandler);
+					System.out.println("m---" + m);
+					System.out.println("index--" + index);
 					Thread thread = new Thread(runnable);
 					thread.start();
-					SystemApplication.getInstance()
-							.setBitmapId(spaceIds.get(m));
 					x = n;
 					lx = l;
 					lm = l;
@@ -381,8 +369,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 									spaceId, offset, m, mHandler);
 							Thread thread = new Thread(runnable);
 							thread.start();
-							SystemApplication.getInstance().setBitmapId(
-									spaceIds.get(m));
 
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request(styleId, spaceId, offset);
@@ -396,8 +382,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 					} else {
 						new ToastLayout().showToast(mActivity, "最后一张了哦~");
 					}
-				} 
-				//选择了两个分类，查看下一张
+				}
+				// 选择了两个分类，查看下一张
 				else if (styleStatus && spaceStatus) {
 					o++;
 					if (o <= availableResults - 1) {
@@ -421,8 +407,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 									spaceId, set, m, mHandler);
 							Thread thread = new Thread(runnable);
 							thread.start();
-							SystemApplication.getInstance().setBitmapId(
-									spaceIds.get(m));
 
 							jsonResolver = new JSONResolver();
 							jsonObj = request.request(styleId, spaceId, set);

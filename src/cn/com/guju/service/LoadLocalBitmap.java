@@ -21,7 +21,7 @@ public class LoadLocalBitmap {
 		String path = sd.getPath() + "/Guju/";
 		File file = new File(path);
 		File[] files = file.listFiles();
-		if (sd.canRead()) {
+		if (sd.canRead() && files != null) {
 			if (i < files.length && i >= 0) {
 				String fileName = path + files[i].getName();
 				bitmap = BitmapFactory.decodeFile(fileName);
@@ -41,13 +41,17 @@ public class LoadLocalBitmap {
 				toast = new ToastLayout();
 				toast.showToast(activity, text);
 			}
-		}else{
+		} else if (!sd.canRead() && files != null) {
 			SystemApplication.getInstance().setMyIdeaStatus(false);
 			String text = "SD卡没有安装，无法查看灵感集";
+			toast = new ToastLayout();
+			toast.showToast(activity, text);
+		} else if (files == null) {
+			SystemApplication.getInstance().setMyIdeaStatus(false);
+			String text = "灵感集里面还没有图片呢~";
 			toast = new ToastLayout();
 			toast.showToast(activity, text);
 		}
 
 	}
-
 }
